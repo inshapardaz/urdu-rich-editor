@@ -15,7 +15,7 @@ const FONT_FAMILY_OPTIONS = [
 const FontDropDown = ({ value, onChange = (e) => {} }) => {
 
   return (
-    <Select defaultValue={ value } options={ FONT_FAMILY_OPTIONS } onChange={ onChange } />
+    <Select size="large" defaultValue={ value } options={ FONT_FAMILY_OPTIONS } onChange={ onChange } />
   );
 };
 
