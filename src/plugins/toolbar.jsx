@@ -46,6 +46,7 @@ import { getSelectedNode } from '../utils/getSelectedNode';
 import FontDropDown from "./fontDropdown";
 import FontSizeDropDown from "./fontSizeDropdown";
 import BlockFormatDropDown, { blockTypeToBlockName } from './blockFormatDropDown';
+import InsertDropDown from "./insertDropDown";
 import Icons from '../images/icons'
 import CheckButton from "../components/checkButton";
 import AlignFormatDropDown from "./alignFormatDropDown";
@@ -282,7 +283,7 @@ const ToolbarPlugin = () => {
       <FontDropDown value={fontFamily} onChange={changeFont} />
       <FontSizeDropDown value={fontSize} onChange={changeFontSize} />
       <AlignFormatDropDown editor={editor} disabled={!isEditable} />
-
+      <InsertDropDown editor={editor} disabled={!isEditable} />
     </>
   );
 };

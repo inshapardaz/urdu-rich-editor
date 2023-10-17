@@ -15,6 +15,7 @@ import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
 // ------------------------------------------------------
 import ToolbarPlugin from "./plugins/toolbar";
 import AutoLinkPlugin from './plugins/autoLink.Plugin';
+import { HorizontalRulePlugin } from './plugins/horizontalRulePlugin';
 import LinkPlugin from './plugins/link.Plugin';
 import EditorNodes from "./nodes";
 import EditorTheme from './themes/editorTheme'
@@ -71,6 +72,7 @@ const Editor = ({ placeholder = "Enter some text...", richText = false, value = 
         <CheckListPlugin />
         <AutoLinkPlugin />
         <LinkPlugin />
+        <HorizontalRulePlugin />
       </>
       : 
       <PlainTextPlugin

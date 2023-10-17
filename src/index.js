@@ -9,7 +9,7 @@ const root = createRoot(container);
 root.render(
   <React.StrictMode>
     <div className="editor-container">
-      <Editor richText />
+      <Editor richText setValue={(val)=> console.log(val)} />
     </div>
   </React.StrictMode>
 );

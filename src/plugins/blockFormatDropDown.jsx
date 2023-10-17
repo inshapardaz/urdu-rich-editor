@@ -26,7 +26,12 @@ export const blockTypeToBlockName = {
   h4: 'Heading 4',
   h5: 'Heading 5',
   h6: 'Heading 6',
-  paragraph: 'Normal'
+  paragraph: 'Normal',
+  bullet: 'Bullet List',
+  number: 'Number List',
+  quote: 'Quote',
+  code: 'Code'
+
 };
 
 const blockTypeToBlockIcon = {
@@ -36,7 +41,11 @@ const blockTypeToBlockIcon = {
   h4: <Icons.TextHeading4 />,
   h5: <Icons.TextHeading5 />,
   h6: <Icons.TextHeading6 />,
-  paragraph: <Icons.Paragraph />
+  paragraph: <Icons.Paragraph />,
+  bullet: <Icons.BulletList />,
+  number: <Icons.NumberList />,
+  quote: <Icons.Quote />,
+  code: <Icons.Code />
 };
 // ----------------------------------------------------------------
 function BlockFormatDropDown({
@@ -64,18 +73,10 @@ function BlockFormatDropDown({
     }
   };
 
-  
+
   const formatBulletList = () => {
     if (blockType !== 'bullet') {
       editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND, undefined);
-    } else {
-      editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined);
-    }
-  };
-
-  const formatCheckList = () => {
-    if (blockType !== 'check') {
-      editor.dispatchCommand(INSERT_CHECK_LIST_COMMAND, undefined);
     } else {
       editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined);
     }

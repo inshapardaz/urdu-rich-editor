@@ -1,7 +1,8 @@
 {
-  "name": "urdu-editor",
+  "name": "urdu-rich-editor",
   "version": "0.1.0",
-  "private": true,
+  "main": "editor.js",
+  "author": "Muhammad Umer Farooq",
   "dependencies": {
     "@excalidraw/excalidraw": "^0.14.2",
     "@lexical/clipboard": "0.11.2",
