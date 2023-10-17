@@ -1,6 +1,6 @@
 {
   "name": "urdu-rich-editor",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "editor.js",
   "author": "Muhammad Umer Farooq",
   "dependencies": {
