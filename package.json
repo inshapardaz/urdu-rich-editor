@@ -1,7 +1,13 @@
 {
   "name": "urdu-rich-editor",
   "version": "0.1.1",
-  "main": "editor.js",
+  "main": "dist/index.js",
+  "module": "dist/index.modern.js",
+  "source": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/inshapardaz/urdu-web-editor"
+  },
   "author": "Muhammad Umer Farooq",
   "dependencies": {
     "@excalidraw/excalidraw": "^0.14.2",
@@ -19,18 +25,19 @@
     "@lexical/selection": "0.11.2",
     "@lexical/table": "0.11.2",
     "@lexical/utils": "0.11.2",
-    "@reduxjs/toolkit": "^1.9.5",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^14.4.3",
     "antd": "^5.8.2",
     "katex": "^0.15.2",
     "lexical": "0.11.2",
+    "web-vitals": "^2.1.4"
+  },
+  "devDependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-redux": "^8.1.1",
     "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
+    "rimraf": "^5.0.5"
   },
   "scripts": {
     "start": "react-scripts start",
