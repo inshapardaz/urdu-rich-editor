@@ -1,77 +1,58 @@
 {
   "name": "urdu-rich-editor",
-  "version": "0.1.2-beta.0",
+  "version": "1.0.0.0",
   "description": "Urdu Rich Text Editor for web based on lexical",
   "author": "Muhammad Umer Farooq",
   "license": "MIT",
   "repository": "inshapardaz/urdu-rich-editor",
-  "main": "dist/index.js",
-  "module": "dist/index.modern.js",
-  "source": "src/index.js",
-  "engines": {
-    "node": ">=10"
-  },
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "files": [
+    "css",
+    "es",
+    "lib",
+    "umd"
+  ],
   "scripts": {
-    "build": "microbundle-crl --no-compress --format modern,cjs",
-    "start": "microbundle-crl watch --no-compress --format modern,cjs",
-    "prepare": "run-s build",
-    "test": "run-s test:unit test:lint test:build",
-    "test:build": "run-s build",
-    "test:lint": "eslint .",
-    "test:unit": "cross-env CI=1 react-scripts test --env=jsdom",
-    "test:watch": "react-scripts test --env=jsdom",
-    "predeploy": "cd example && npm install && npm run build",
-    "deploy": "gh-pages -d example/build"
+    "build": "nwb build-react-component",
+    "clean": "nwb clean-module && nwb clean-demo",
+    "prepublishOnly": "npm run build",
+    "start": "nwb serve-react-demo",
+    "test": "nwb test-react",
+    "test:coverage": "nwb test-react --coverage",
+    "test:watch": "nwb test-react --server"
   },
   "peerDependencies": {
-    "react": "^16.0.0"
+    "react": "16.x"
   },
   "dependencies": {
-    "@excalidraw/excalidraw": "^0.14.2",
-    "@lexical/clipboard": "0.11.2",
-    "@lexical/code": "0.11.2",
-    "@lexical/file": "0.11.2",
-    "@lexical/hashtag": "0.11.2",
-    "@lexical/link": "0.11.2",
-    "@lexical/list": "0.11.2",
-    "@lexical/mark": "0.11.2",
-    "@lexical/overflow": "0.11.2",
-    "@lexical/plain-text": "0.11.2",
-    "@lexical/react": "0.11.2",
-    "@lexical/rich-text": "0.11.2",
-    "@lexical/selection": "0.11.2",
-    "@lexical/table": "0.11.2",
-    "@lexical/utils": "0.11.2",
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^14.4.3",
-    "antd": "^5.8.2",
+    "@excalidraw/excalidraw": "^0.17.0",
+    "@lexical/clipboard": "0.12.5",
+    "@lexical/code": "0.12.5",
+    "@lexical/file": "0.12.5",
+    "@lexical/hashtag": "0.12.5",
+    "@lexical/link": "0.12.5",
+    "@lexical/list": "0.12.5",
+    "@lexical/mark": "0.12.5",
+    "@lexical/overflow": "0.12.5",
+    "@lexical/plain-text": "0.12.5",
+    "@lexical/react": "0.12.5",
+    "@lexical/rich-text": "0.12.5",
+    "@lexical/selection": "0.12.5",
+    "@lexical/table": "0.12.5",
+    "@lexical/utils": "0.12.5",
+    "antd": "^5.12.2",
     "katex": "^0.15.2",
-    "lexical": "0.11.2",
-    "web-vitals": "^2.1.4"
+    "lexical": "0.12.5"
   },
   "devDependencies": {
-    "microbundle-crl": "^0.13.10",
-    "babel-eslint": "^10.0.3",
-    "cross-env": "^7.0.2",
-    "eslint": "^6.8.0",
-    "eslint-config-prettier": "^6.7.0",
-    "eslint-config-standard": "^14.1.0",
-    "eslint-config-standard-react": "^9.2.0",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-node": "^11.0.0",
-    "eslint-plugin-prettier": "^3.1.1",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-react": "^7.17.0",
-    "eslint-plugin-standard": "^4.0.1",
-    "gh-pages": "^2.2.0",
-    "npm-run-all": "^4.1.5",
-    "prettier": "^2.0.4",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-scripts": "^3.4.1"
+    "nwb": "0.25.x",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
-  "files": [
-    "dist"
+  "keywords": [
+    "react-component",
+    "urdu",
+    "text-editor"
   ]
 }

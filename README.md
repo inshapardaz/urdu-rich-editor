@@ -39,14 +39,6 @@ npm install
 npm start
 ```
 
-### Run example
-
-```bash
-cd example
-npm install
-npm start
-```
-
 
 
 ## License

@@ -1,4 +1,5 @@
-import React, { useEffect, useState, Fragment } from "react";
+import React, {useEffect, useState } from 'react'
+
 // ------------------------------------------------------
 
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
@@ -24,6 +25,7 @@ import EditorTheme from './themes/editorTheme'
 import styles from './styles.module.css'; // Import css modules stylesheet as styles
 // ------------------------------------------------------
 
+
 function onError(error) {
   console.error(error);
 }
@@ -45,7 +47,7 @@ function Placeholder({ children }) {
 }
 // ------------------------------------------------------
 
-export const Editor = ({ placeholder = "Enter some text...", richText = false, value = null, setValue = () => {} }) => {
+export default ({ placeholder = "Enter some text...", richText = false, value = null, setValue = () => {} }) => {
   const [editorState, setEditorState] = useState(value);
   const initialConfig = {
     namespace: "MyEditor",
