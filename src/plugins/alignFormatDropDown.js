@@ -6,7 +6,7 @@ import {
   OUTDENT_CONTENT_COMMAND,
 } from "lexical";
 
-import { Button, Dropdown } from "antd";
+import { Button, Dropdown, Space } from "antd";
 
 // Local imports
 import Icons from '../icons'
@@ -41,14 +41,15 @@ function AlignFormatDropDown({ editor, isRtl, disabled = false }) {
     icon: isRtl ? <Icons.IndentIncrease /> : <Icons.IndentDecrease />
   }]
 
-  return (<>
-    <Dropdown disabled={disabled} menu={{
-      items,
-    }}>
-      <Button size="large" icon={<Icons.AlignLeft />} >Align</Button>
+  return (
+    <Dropdown disabled={disabled} menu={{items}}>
+      <Button type="text" size="large" icon={<Icons.AlignLeft />}>
+        <Space>
+          Align
+          <Icons.Down />
+        </Space>
+        </Button>
     </Dropdown>
-
-    </>
   );
 }
 

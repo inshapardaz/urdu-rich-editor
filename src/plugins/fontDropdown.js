@@ -1,5 +1,6 @@
 import React from 'react';
-import { Select } from "antd";
+import { Button, Dropdown, Select, Space } from "antd";
+import Icons from '../icons';
 
 // --------------------------------------------------
 
@@ -13,10 +14,21 @@ const FONT_FAMILY_OPTIONS = [
 ];
 
 // --------------------------------------------------
-const FontDropDown = ({ value, onChange = (e) => {} }) => {
-
+const FontDropDown = ({ fonts, value, onChange = () => {} }) => {
+  const items = (fonts && fonts.length > 0 ? fonts :  FONT_FAMILY_OPTIONS)
+  .map(i => ({
+    onClick: () => onChange(i.value),
+    label: i.label,
+  }));
   return (
-    <Select size="large" defaultValue={ value } options={ FONT_FAMILY_OPTIONS } onChange={ onChange } />
+    <Dropdown menu={{items}}>
+      <Button type="text" size="large">
+        <Space>
+          {value}
+          <Icons.Down />
+        </Space>
+        </Button>
+    </Dropdown>
   );
 };
 

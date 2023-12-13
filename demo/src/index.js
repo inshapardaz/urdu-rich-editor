@@ -7,7 +7,7 @@ import '../../src/styles.module.css'
 export default class Demo extends Component {
   render() {
     return (
-      <div className="editor-container">
+      <div className="editor-shell">
         <Editor richText setValue={(val)=> console.log(val)} />
       </div>
     );

@@ -39,7 +39,7 @@ import { $isHeadingNode } from '@lexical/rich-text';
 import { useCallback, useEffect, useState } from "react";
 
 // -----------------------------------------------------------
-import { Button } from "antd";
+import { Button, Divider } from "antd";
 // -----------------------------------------------------------
 
 import { sanitizeUrl } from '../utils/url';
@@ -53,7 +53,7 @@ import CheckButton from "../components/checkButton";
 import AlignFormatDropDown from "./alignFormatDropDown";
 // -----------------------------------------------------------
 
-const ToolbarPlugin = () => {
+const ToolbarPlugin = ({ fonts }) => {
   const [editor] = useLexicalComposerContext();
   const [activeEditor, setActiveEditor] = useState(editor);
   const [isRTL, setIsRTL] = useState(false);
@@ -260,30 +260,31 @@ const ToolbarPlugin = () => {
 
   return (
     <>
-      <Button.Group size="large">
-        <Button onClick={() => activeEditor.dispatchCommand(UNDO_COMMAND, undefined)} disabled={!canUndo}
-          icon={<Icons.Undo />} />
-        <Button onClick={() => activeEditor.dispatchCommand(REDO_COMMAND, undefined)} disabled={!canRedo}
-          icon={<Icons.Redo />} />
-      </Button.Group>
+      <Button type="text" size="large" onClick={() => activeEditor.dispatchCommand(UNDO_COMMAND, undefined)} disabled={!canUndo}
+        icon={<Icons.Undo />} />
+      <Button type="text" size="large" onClick={() => activeEditor.dispatchCommand(REDO_COMMAND, undefined)} disabled={!canRedo}
+        icon={<Icons.Redo />} />
+      <Divider type="vertical" />
       <BlockFormatDropDown
             disabled={!isEditable}
             blockType={blockType}
             rootType={rootType}
             editor={editor}
         />
-      <Button.Group size="large">
-        <CheckButton checked={isBold} onClick={() => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold")} icon={<Icons.Bold />} />
-        <CheckButton checked={isItalic} onClick={() => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic")} icon={<Icons.Italic />} />
-        <CheckButton checked={isUnderline} onClick={() => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "underline")} icon={<Icons.Underline />} />
-        <CheckButton checked={isStrikethrough} onClick={() => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "strikethrough")} icon={<Icons.Strikethrough />} />
-        <CheckButton checked={isSubscript} onClick={() => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "subscript")} icon={<Icons.SubScript />} />
-        <CheckButton checked={isSuperscript} onClick={() => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "superscript")} icon={<Icons.SuperScript />} />
-        <CheckButton checked={isLink} onClick={insertLink} disabled={!isEditable} icon={<Icons.Link />} />
-      </Button.Group>
-      <FontDropDown value={fontFamily} onChange={changeFont} />
+      <Divider type="vertical" />
+      <CheckButton type="text" size="large" checked={isBold} onClick={() => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold")} icon={<Icons.Bold />} />
+      <CheckButton type="text" size="large" checked={isItalic} onClick={() => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic")} icon={<Icons.Italic />} />
+      <CheckButton type="text" size="large" checked={isUnderline} onClick={() => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "underline")} icon={<Icons.Underline />} />
+      <CheckButton type="text" size="large" checked={isStrikethrough} onClick={() => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "strikethrough")} icon={<Icons.Strikethrough />} />
+      <CheckButton type="text" size="large" checked={isSubscript} onClick={() => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "subscript")} icon={<Icons.SubScript />} />
+      <CheckButton type="text" size="large" checked={isSuperscript} onClick={() => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "superscript")} icon={<Icons.SuperScript />} />
+      <CheckButton type="text" size="large" checked={isLink} onClick={insertLink} disabled={!isEditable} icon={<Icons.Link />} />
+      <Divider type="vertical" />
+      <FontDropDown fonts={fonts} value={fontFamily} onChange={changeFont} />
       <FontSizeDropDown value={fontSize} onChange={changeFontSize} />
+      <Divider type="vertical" />
       <AlignFormatDropDown editor={editor} disabled={!isEditable} />
+      <Divider type="vertical" />
       <InsertDropDown editor={editor} disabled={!isEditable} />
     </>
   );

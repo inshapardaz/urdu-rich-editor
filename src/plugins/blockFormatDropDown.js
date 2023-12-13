@@ -15,7 +15,7 @@ import {
 import { $setBlocksType } from "@lexical/selection";
 import { $createHeadingNode,  $createQuoteNode } from '@lexical/rich-text';
 
-import { Button, Dropdown } from "antd";
+import { Button, Dropdown, Space } from "antd";
 
 // Local imports
 import Icons from '../icons'
@@ -179,9 +179,13 @@ function BlockFormatDropDown({
     <Dropdown disabled={disabled} menu={{
       items,
     }}>
-      <Button size="large" icon={blockTypeToBlockIcon[blockType]}>{blockTypeToBlockName[blockType]}</Button>
+      <Button type="text" size="large" icon={blockTypeToBlockIcon[blockType]}>
+        <Space>
+          {blockTypeToBlockName[blockType]}
+          <Icons.Down />
+        </Space>
+        </Button>
     </Dropdown>
-
     </>
   );
 }

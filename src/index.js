@@ -22,9 +22,8 @@ import EditorNodes from "./nodes";
 import EditorTheme from './themes/editorTheme'
 // ------------------------------------------------------
 
-import styles from './styles.module.css'; // Import css modules stylesheet as styles
+import './styles.module.css'; // Import css modules stylesheet as styles
 // ------------------------------------------------------
-
 
 function onError(error) {
   console.error(error);
@@ -43,11 +42,11 @@ function MyCustomAutoFocusPlugin() {
 
 // ------------------------------------------------------
 function Placeholder({ children }) {
-  return <div className={styles.editorPlaceholder}>{children}</div>;
+  return <div className="editorPlaceholder" data-ft="placeholder">{children}</div>;
 }
 // ------------------------------------------------------
 
-export default ({ placeholder = "Enter some text...", richText = false, value = null, setValue = () => {} }) => {
+export default ({ placeholder = "Enter some text...", richText = false, fonts = [], value = null, setValue = () => {} }) => {
   const [editorState, setEditorState] = useState(value);
   const initialConfig = {
     namespace: "MyEditor",
@@ -65,29 +64,29 @@ export default ({ placeholder = "Enter some text...", richText = false, value = 
   }
 
   return (
-    <LexicalComposer initialConfig={initialConfig}>
-      { richText && <ToolbarPlugin /> }
-      { richText ? <>
-        <RichTextPlugin
-          contentEditable={<ContentEditable className={styles.editorInput} />}
+      <LexicalComposer initialConfig={initialConfig}>
+        { richText && <ToolbarPlugin fonts={fonts} /> }
+        { richText ? <>
+          <RichTextPlugin
+            contentEditable={<ContentEditable className="editorInput" />}
+            placeholder={<Placeholder>{placeholder}</Placeholder>}
+            ErrorBoundary={LexicalErrorBoundary}
+          />
+          <ListPlugin />
+          <CheckListPlugin />
+          <AutoLinkPlugin />
+          <LinkPlugin />
+          <HorizontalRulePlugin />
+        </>
+        :
+        <PlainTextPlugin
+          contentEditable={<ContentEditable className="editorInput" />}
           placeholder={<Placeholder>{placeholder}</Placeholder>}
           ErrorBoundary={LexicalErrorBoundary}
-        />
-        <ListPlugin />
-        <CheckListPlugin />
-        <AutoLinkPlugin />
-        <LinkPlugin />
-        <HorizontalRulePlugin />
-      </>
-      :
-      <PlainTextPlugin
-        contentEditable={<ContentEditable className={styles.editorInput} />}
-        placeholder={<Placeholder>{placeholder}</Placeholder>}
-        ErrorBoundary={LexicalErrorBoundary}
-      /> }
-      <HistoryPlugin />
-      <MyCustomAutoFocusPlugin />
-      <OnChangePlugin onChange={onChange} />
-    </LexicalComposer>
+        /> }
+        <HistoryPlugin />
+        <MyCustomAutoFocusPlugin />
+        <OnChangePlugin onChange={onChange} />
+      </LexicalComposer>
   );
 };

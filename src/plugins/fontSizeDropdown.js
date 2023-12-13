@@ -1,5 +1,6 @@
 import React from 'react';
-import { Select } from "antd";
+import { Button, Dropdown, Select, Space } from "antd";
+import Icons from '../icons';
 
 // --------------------------------------------------
 
@@ -24,10 +25,21 @@ const FONT_SIZE_OPTIONS = [
 ];
 
 // --------------------------------------------------
-const FontSizeDropDown = ({ value, onChange = (e) => {} }) => {
-
+const FontSizeDropDown = ({ value, fontSizes, onChange = () => {} }) => {
+  const items = (fontSizes && fontSizes.length > 0 ? fontSizes :  FONT_SIZE_OPTIONS)
+  .map(i => ({
+    onClick: () => onChange(i.value),
+    label: i.label,
+  }));
   return (
-    <Select size="large" defaultValue={ value } options={ FONT_SIZE_OPTIONS } onChange={ onChange } />
+    <Dropdown menu={{items}}>
+      <Button type="text" size="large">
+        <Space>
+          {value}
+          <Icons.Down />
+        </Space>
+        </Button>
+    </Dropdown>
   );
 };
 

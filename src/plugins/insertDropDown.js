@@ -3,7 +3,7 @@ import React, { Fragment } from 'react';
 import {INSERT_HORIZONTAL_RULE_COMMAND} from '@lexical/react/LexicalHorizontalRuleNode';
 
 // 3rd party
-import { Button, Dropdown } from "antd";
+import { Button, Dropdown, Space } from "antd";
 // local import
 import Icons from "../icons";
 
@@ -28,15 +28,16 @@ function InsertDropDown({
         icon: <Icons.Image/>,
       }, ]
 
-      return (<>
-        <Dropdown disabled={disabled} menu={{
-          items,
-        }}>
-          <Button size="large" icon={<Icons.Plus />}>Insert</Button>
-        </Dropdown>
-
-        </>
-      );
+    return (
+      <Dropdown disabled={disabled} menu={{items}}>
+        <Button type="text" size="large" icon={<Icons.Plus />}>
+          <Space>
+            Insert
+            <Icons.Down />
+          </Space>
+          </Button>
+      </Dropdown>
+    );
   }
 
 export default InsertDropDown;
