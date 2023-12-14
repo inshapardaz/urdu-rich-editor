@@ -46,7 +46,7 @@ function Placeholder({ children }) {
 }
 // ------------------------------------------------------
 
-export default ({ placeholder = "Enter some text...", richText = false, fonts = [], value = null, setValue = () => {} }) => {
+export default ({ placeholder = "Enter some text...", richText = false, fonts = [], value = '', setValue = () => {} }) => {
   const [editorState, setEditorState] = useState(value);
   const initialConfig = {
     namespace: "MyEditor",

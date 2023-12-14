@@ -16,7 +16,6 @@ npm install --save urdu-web-editor
 import React, { Component } from 'react'
 
 import Editor from 'urdu-web-editor'
-import 'urdu-web-editor/dist/index.css'
 
 class Example extends Component {
   render() {
