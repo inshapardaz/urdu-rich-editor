@@ -1,13 +1,13 @@
-# urdu-rich-editor
+# urdu-web-editor
 
 > Urdu Rich Text Editor for web based on lexical
 
-[![NPM](https://img.shields.io/npm/v/urdu-rich-editor.svg)](https://www.npmjs.com/package/urdu-rich-editor) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+[![NPM](https://img.shields.io/npm/v/urdu-web-editor.svg)](https://www.npmjs.com/package/urdu-web-editor) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 ## Install
 
 ```bash
-npm install --save urdu-rich-editor
+npm install --save urdu-web-editor
 ```
 
 ## Usage
@@ -15,8 +15,8 @@ npm install --save urdu-rich-editor
 ```jsx
 import React, { Component } from 'react'
 
-import Editor from 'urdu-rich-editor'
-import 'urdu-rich-editor/dist/index.css'
+import Editor from 'urdu-web-editor'
+import 'urdu-web-editor/dist/index.css'
 
 class Example extends Component {
   render() {

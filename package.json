@@ -1,10 +1,10 @@
 {
-  "name": "urdu-rich-editor",
+  "name": "urdu-web-editor",
   "version": "1.0.0-beta.1",
   "description": "Urdu Rich Text Editor for web based on lexical",
   "author": "Muhammad Umer Farooq",
   "license": "MIT",
-  "repository": "inshapardaz/urdu-rich-editor",
+  "repository": "inshapardaz/urdu-web-editor",
   "main": "lib/index.js",
   "module": "es/index.js",
   "files": [
