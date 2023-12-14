@@ -23,7 +23,7 @@
     "test:watch": "nwb test-react --server"
   },
   "peerDependencies": {
-    "react": "16.x"
+    "react": "18.x"
   },
   "dependencies": {
     "@excalidraw/excalidraw": "^0.17.0",
