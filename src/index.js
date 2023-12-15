@@ -21,8 +21,14 @@ import LinkPlugin from './plugins/link.Plugin';
 import EditorNodes from "./nodes";
 import EditorTheme from './themes/editorTheme'
 // ------------------------------------------------------
-
+import i18n  from './i18n';
 import './styles.module.css'; // Import css modules stylesheet as styles
+
+// ------------------------------------------------------
+
+const EMPTY_CONTENT =
+  '{"root":{"children":[{"children":[],"direction":null,"format":"","indent":0,"type":"paragraph","version":1}],"direction":null,"format":"","indent":0,"type":"root","version":1}}';
+
 // ------------------------------------------------------
 
 function onError(error) {
@@ -46,7 +52,20 @@ function Placeholder({ children }) {
 }
 // ------------------------------------------------------
 
-export default ({ placeholder = "Enter some text...", richText = false, fonts = [], value = '', setValue = () => {} }) => {
+export default ({ value = EMPTY_CONTENT,
+  setValue = () => {},
+  configuration = {
+    richText : false,
+    toolbar : {
+      fonts : null,
+      fontSizes: null,
+    },
+    language : "en",
+    languageTools: false,
+    placeholder : null,
+  }
+}) => {
+  const locale = i18n[configuration.language];
   const [editorState, setEditorState] = useState(value);
   const initialConfig = {
     namespace: "MyEditor",
@@ -65,11 +84,11 @@ export default ({ placeholder = "Enter some text...", richText = false, fonts = 
 
   return (
       <LexicalComposer initialConfig={initialConfig}>
-        { richText && <ToolbarPlugin fonts={fonts} /> }
-        { richText ? <>
+        { configuration.richText && <ToolbarPlugin configuration={configuration.toolbar} locale={locale} /> }
+        { configuration.richText ? <>
           <RichTextPlugin
             contentEditable={<ContentEditable className="editorInput" />}
-            placeholder={<Placeholder>{placeholder}</Placeholder>}
+            placeholder={<Placeholder>{configuration.placeholder ??  locale.resources.placeholder }</Placeholder>}
             ErrorBoundary={LexicalErrorBoundary}
           />
           <ListPlugin />
@@ -81,7 +100,7 @@ export default ({ placeholder = "Enter some text...", richText = false, fonts = 
         :
         <PlainTextPlugin
           contentEditable={<ContentEditable className="editorInput" />}
-          placeholder={<Placeholder>{placeholder}</Placeholder>}
+          placeholder={<Placeholder>{configuration.placeholder ??  locale.resources.placeholder}</Placeholder>}
           ErrorBoundary={LexicalErrorBoundary}
         /> }
         <HistoryPlugin />

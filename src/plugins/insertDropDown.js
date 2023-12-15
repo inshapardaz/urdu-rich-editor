@@ -3,14 +3,16 @@ import React, { Fragment } from 'react';
 import {INSERT_HORIZONTAL_RULE_COMMAND} from '@lexical/react/LexicalHorizontalRuleNode';
 
 // 3rd party
-import { Button, Dropdown, Space } from "antd";
+import { Button, Dropdown, Space, Tooltip } from "antd";
 // local import
 import Icons from "../icons";
 
 // --------------------------------------
 
 function InsertDropDown({
-    editor, disabled = false,
+    editor,
+    disabled = false,
+    locale
   }) {
     const onHorizontalRule = () => {
         editor.dispatchCommand(INSERT_HORIZONTAL_RULE_COMMAND, undefined);
@@ -20,11 +22,11 @@ function InsertDropDown({
     }
     const items = [{
         onClick: onHorizontalRule,
-        label: 'Horizontal Rule',
+        label: locale.resources.horizontalRule,
         icon: <Icons.HorizontalRule />
       }, {
         onClick: onInsertImage,
-        label: 'Insert Image',
+        label: locale.resources.image,
         icon: <Icons.Image/>,
       }, ]
 
@@ -32,10 +34,10 @@ function InsertDropDown({
       <Dropdown disabled={disabled} menu={{items}}>
         <Button type="text" size="large" icon={<Icons.Plus />}>
           <Space>
-            Insert
+            {locale.resources.insert}
             <Icons.Down />
           </Space>
-          </Button>
+        </Button>
       </Dropdown>
     );
   }

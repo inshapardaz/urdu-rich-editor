@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import useLexicalEditable from '@lexical/react/useLexicalEditable';
 import {
@@ -39,7 +39,7 @@ import { $isHeadingNode } from '@lexical/rich-text';
 import { useCallback, useEffect, useState } from "react";
 
 // -----------------------------------------------------------
-import { Button, Divider } from "antd";
+import { Button, Divider, Tooltip } from "antd";
 // -----------------------------------------------------------
 
 import { sanitizeUrl } from '../utils/url';
@@ -53,7 +53,18 @@ import CheckButton from "../components/checkButton";
 import AlignFormatDropDown from "./alignFormatDropDown";
 // -----------------------------------------------------------
 
-const ToolbarPlugin = ({ fonts }) => {
+const ToolbarPlugin = ({ configuration = {
+  fonts : null,
+  fontSizes : null,
+  showAlignment: true,
+  showBlockFormat: true,
+  showFontFormat: true,
+  showInsert: true,
+  showListFormat: true,
+  showUndoRedo: true,
+  showExtraFormat: true,
+  showInsertLink: true,
+}, locale }) => {
   const [editor] = useLexicalComposerContext();
   const [activeEditor, setActiveEditor] = useState(editor);
   const [isRTL, setIsRTL] = useState(false);
@@ -260,32 +271,42 @@ const ToolbarPlugin = ({ fonts }) => {
 
   return (
     <>
-      <Button type="text" size="large" onClick={() => activeEditor.dispatchCommand(UNDO_COMMAND, undefined)} disabled={!canUndo}
-        icon={<Icons.Undo />} />
-      <Button type="text" size="large" onClick={() => activeEditor.dispatchCommand(REDO_COMMAND, undefined)} disabled={!canRedo}
-        icon={<Icons.Redo />} />
-      <Divider type="vertical" />
+      { configuration.showUndoRedo && <>
+      <Tooltip title={locale.resources.undo}>
+        <Button type="text" size="large" onClick={() => activeEditor.dispatchCommand(UNDO_COMMAND, undefined)} disabled={!canUndo}
+          icon={ locale.isRtl ? <Icons.Redo /> : <Icons.Undo />} />
+      </Tooltip>
+      <Tooltip title={locale.resources.redo}>
+        <Button type="text" size="large" onClick={() => activeEditor.dispatchCommand(REDO_COMMAND, undefined)} disabled={!canRedo}
+          icon={locale.isRtl ? <Icons.Undo /> : <Icons.Redo /> } />
+      </Tooltip>
+      <Divider type="vertical" /></> }
+      { configuration.showBlockFormat && <>
       <BlockFormatDropDown
             disabled={!isEditable}
             blockType={blockType}
             rootType={rootType}
             editor={editor}
+            locale={locale}
         />
       <Divider type="vertical" />
-      <CheckButton type="text" size="large" checked={isBold} onClick={() => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold")} icon={<Icons.Bold />} />
-      <CheckButton type="text" size="large" checked={isItalic} onClick={() => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic")} icon={<Icons.Italic />} />
-      <CheckButton type="text" size="large" checked={isUnderline} onClick={() => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "underline")} icon={<Icons.Underline />} />
-      <CheckButton type="text" size="large" checked={isStrikethrough} onClick={() => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "strikethrough")} icon={<Icons.Strikethrough />} />
-      <CheckButton type="text" size="large" checked={isSubscript} onClick={() => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "subscript")} icon={<Icons.SubScript />} />
-      <CheckButton type="text" size="large" checked={isSuperscript} onClick={() => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "superscript")} icon={<Icons.SuperScript />} />
-      <CheckButton type="text" size="large" checked={isLink} onClick={insertLink} disabled={!isEditable} icon={<Icons.Link />} />
+      </> }
+      <CheckButton type="text" size="large" tooltip={locale.resources.bold} checked={isBold} onClick={() => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold")} icon={<Icons.Bold />} />
+      <CheckButton type="text" size="large" tooltip={locale.resources.italic} checked={isItalic} onClick={() => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic")} icon={<Icons.Italic />} />
+      <CheckButton type="text" size="large" tooltip={locale.resources.underline} checked={isUnderline} onClick={() => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "underline")} icon={<Icons.Underline />} />
+      { configuration.showExtraFormat && <>
+      <CheckButton type="text" size="large" tooltip={locale.resources.strikethrough} checked={isStrikethrough} onClick={() => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "strikethrough")} icon={<Icons.Strikethrough />} />
+      <CheckButton type="text" size="large" tooltip={locale.resources.subscript} checked={isSubscript} onClick={() => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "subscript")} icon={<Icons.SubScript />} />
+      <CheckButton type="text" size="large" tooltip={locale.resources.superscript} checked={isSuperscript} onClick={() => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "superscript")} icon={<Icons.SuperScript />} />
+      </> }
+      { configuration.showInsertLink && <CheckButton type="text" size="large" tooltip={locale.resources.link} checked={isLink} onClick={insertLink} disabled={!isEditable} icon={<Icons.Link />} />}
+      { configuration.showFontFormat &&   <>
       <Divider type="vertical" />
-      <FontDropDown fonts={fonts} value={fontFamily} onChange={changeFont} />
-      <FontSizeDropDown value={fontSize} onChange={changeFontSize} />
-      <Divider type="vertical" />
-      <AlignFormatDropDown editor={editor} disabled={!isEditable} />
-      <Divider type="vertical" />
-      <InsertDropDown editor={editor} disabled={!isEditable} />
+      <FontDropDown fonts={configuration.fonts} value={fontFamily} onChange={changeFont} />
+      <FontSizeDropDown fontSizes={configuration.fontSizes} value={fontSize} onChange={changeFontSize} />
+      </> }
+      { configuration.showAlignment && <><Divider type="vertical" /><AlignFormatDropDown editor={editor} disabled={!isEditable} locale={locale}/></> }
+      { configuration.showInsert && <><Divider type="vertical" /><InsertDropDown locale={locale} editor={editor} disabled={!isEditable} /></> }
     </>
   );
 };

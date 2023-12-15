@@ -36,6 +36,11 @@ code {
   pointer-events: none;
 }
 
+.rtl .editorPlaceholder {
+  right: 18px;
+  left: auto;
+}
+
 
 .editor-shell {
   margin: 20px auto;

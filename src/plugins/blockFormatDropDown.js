@@ -19,39 +19,26 @@ import { Button, Dropdown, Space } from "antd";
 
 // Local imports
 import Icons from '../icons'
+
 // ----------------------------------------------------------------
 
 export const blockTypeToBlockName = {
-  h1: 'Heading 1',
-  h2: 'Heading 2',
-  h3: 'Heading 3',
-  h4: 'Heading 4',
-  h5: 'Heading 5',
-  h6: 'Heading 6',
+  h1: 'h1',
+  h2: 'h2',
+  h3: 'h3',
+  h4: 'h4',
+  h5: 'h5',
+  h6: 'h6',
   paragraph: 'Normal',
-  bullet: 'Bullet List',
-  number: 'Number List',
-  quote: 'Quote',
-  code: 'Code'
+  bullet: 'bullet',
+  number: 'number',
+  quote: 'quote',
+  code: 'code'
 
-};
-
-const blockTypeToBlockIcon = {
-  h1: <Icons.TextHeading1 />,
-  h2: <Icons.TextHeading2 />,
-  h3: <Icons.TextHeading3 />,
-  h4: <Icons.TextHeading4 />,
-  h5: <Icons.TextHeading5 />,
-  h6: <Icons.TextHeading6 />,
-  paragraph: <Icons.Paragraph />,
-  bullet: <Icons.BulletList />,
-  number: <Icons.NumberList />,
-  quote: <Icons.Quote />,
-  code: <Icons.Code />
 };
 // ----------------------------------------------------------------
 function BlockFormatDropDown({
-  editor, blockType, disabled = false,
+  editor, blockType, disabled = false, locale
 }) {
   const formatParagraph = () => {
     editor.update(() => {
@@ -128,60 +115,73 @@ function BlockFormatDropDown({
 
   const items = [{
     onClick: formatParagraph,
-    label: 'Normal',
-    icon: <Icons.Paragraph />
+    label: locale.resources.normal,
+    icon: <Icons.Paragraph />,
+    id: blockTypeToBlockName.normal
   }, {
     onClick: () => formatHeading('h1'),
-    label: 'Heading 1',
-    icon: <Icons.TextHeading1 />
+    label: locale.resources.heading1,
+    icon: <Icons.TextHeading1 />,
+    id: blockTypeToBlockName.h1
   }, {
     onClick: () => formatHeading('h2'),
-    label: 'Heading 2',
-    icon: <Icons.TextHeading2 />
+    label: locale.resources.heading2,
+    icon: <Icons.TextHeading2 />,
+    id: blockTypeToBlockName.h2
   }, {
     onClick: () => formatHeading('h3'),
-    label: 'Heading 3',
-    icon: <Icons.TextHeading3 />
+    label: locale.resources.heading3,
+    icon: <Icons.TextHeading3 />,
+    id: blockTypeToBlockName.h3
   }, {
     onClick: () => formatHeading('h4'),
-    label: 'Heading 4',
-    icon: <Icons.TextHeading4 />
+    label: locale.resources.heading4,
+    icon: <Icons.TextHeading4 />,
+    id: blockTypeToBlockName.h4
   }, {
     onClick: () => formatHeading('h5'),
-    label: 'Heading 5',
-    icon: <Icons.TextHeading5 />
+    label: locale.resources.heading5,
+    icon: <Icons.TextHeading5 />,
+    id: blockTypeToBlockName.h5
   }, {
     onClick: () => formatHeading('h6'),
-    label: 'Heading 6',
-    icon: <Icons.TextHeading6 />
+    label: locale.resources.heading6,
+    icon: <Icons.TextHeading6 />,
+    id: blockTypeToBlockName.h6
   }, {
     type: 'divider'
   }, {
 
     onClick: formatBulletList,
-    label: 'Bullet List',
+    label: locale.resources.bulletList,
     icon: <Icons.BulletList/>,
+    id: blockTypeToBlockName.bullet
   }, {
     onClick: formatNumberedList,
-    label: 'Number List',
+    label: locale.resources.numberList,
     icon: <Icons.NumberList/>,
+    id: blockTypeToBlockName.number
   }, {
     onClick: formatQuote,
-    label: 'Quote',
+    label: locale.resources.quote,
     icon: <Icons.Quote/>,
+    id: blockTypeToBlockName.quote
   }, {
     onClick: formatCode,
-    label: 'Code',
+    label: locale.resources.code,
     icon: <Icons.Code/>,
+    id: blockTypeToBlockName.code
   }]
+
+  const selectedItem = items.find(item => item.id === blockType);
 
   return (<>
     <Dropdown disabled={disabled} menu={{
       items,
     }}>
-      <Button type="text" size="large" icon={blockTypeToBlockIcon[blockType]}>
+      <Button type="text" size="large" icon={selectedItem?.icon ?? <Icons.Paragraph />}>
         <Space>
-          {blockTypeToBlockName[blockType]}
+          {selectedItem?.label ?? locale.resources.normal}
           <Icons.Down />
         </Space>
         </Button>
