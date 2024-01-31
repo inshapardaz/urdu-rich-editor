@@ -20,7 +20,7 @@ code {
   tab-size: 1;
   outline: 0;
   padding: 15px 10px;
-  caret-color: #444;
+  caret-color: #444;;
 }
 
 .editorPlaceholder {
@@ -42,17 +42,20 @@ code {
 }
 
 
-.editor-shell {
+.editorShell {
   margin: 20px auto;
   border-radius: 2px;
   max-width: 1100px;
+  min-height: 300px;
   color: #000;
   position: relative;
   line-height: 1.7;
   font-weight: 400;
+  display: flex;
+  flex-direction: column;
 }
 
-.editor-shell .editor-container {
+.editorShell .editor-container {
   background: #fff;
   position: relative;
   display: block;
@@ -60,11 +63,11 @@ code {
   border-bottom-right-radius: 10px;
 }
 
-.editor-shell .editor-container.tree-view {
+.editorShell .editor-container.tree-view {
   border-radius: 0;
 }
 
-.editor-shell .editor-container.plain-text {
+.editorShell .editor-container.plain-text {
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
 }

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { render } from "react-dom";
 
 import Editor from "../../src";
-import "../../src/styles.module.css";
+import styles from "../../src/styles.module.css";
 import { ConfigProvider, Divider, Drawer, FloatButton, Select, Space, Switch } from "antd";
 import Icons from "../../src/icons";
 
@@ -10,6 +10,7 @@ import i18n from "../../src/i18n";
 
 const Demo = () => {
   const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
   const [configuration, setConfiguration] = useState({
     richText: true,
     language: "en",
@@ -22,7 +23,8 @@ const Demo = () => {
       showUndoRedo: true,
       showExtraFormat: true,
       showInsertLink: true,
-    }
+    },
+    format: "raw",
   });
   const locale = i18n[configuration.language];
   const showDrawer = () => {
@@ -38,9 +40,10 @@ const Demo = () => {
       locale={configuration.language}
       componentSize="large"
     >
-      <div className="editor-shell" style={{ direction: locale.direction }}>
+      <div className={styles.editorShell} style={{ direction: locale.direction }}>
         <Editor
           configuration={configuration}
+          value={value}
           setValue={(val) => console.log(val)}
         />
       </div>
@@ -74,6 +77,23 @@ const Demo = () => {
               {
                 value: "ur",
                 label: "Urdu",
+              },
+            ]}
+          />
+          <Divider />
+          <Select
+            defaultValue={configuration.format}
+            onChange={(value) =>
+              setConfiguration((e) => ({ ...e, format: value }))
+            }
+            options={[
+              {
+                value: "raw",
+                label: "Raw",
+              },
+              {
+                value: "markdown",
+                label: "Markdown",
               },
             ]}
           />
@@ -140,4 +160,4 @@ const Demo = () => {
   );
 };
 
-render(<Demo />, document.querySelector("#demo"));
+render(<Demo />, document.querySelector("#app"));

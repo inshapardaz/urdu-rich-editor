@@ -12,6 +12,12 @@ import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
+import {
+  $convertFromMarkdownString,
+  $convertToMarkdownString,
+  TRANSFORMERS,
+} from '@lexical/markdown';
+import { MarkdownShortcutPlugin } from '@lexical/react/LexicalMarkdownShortcutPlugin';
 
 // ------------------------------------------------------
 import ToolbarPlugin from "./plugins/toolbar";
@@ -22,10 +28,9 @@ import EditorNodes from "./nodes";
 import EditorTheme from './themes/editorTheme'
 // ------------------------------------------------------
 import i18n  from './i18n';
-import './styles.module.css'; // Import css modules stylesheet as styles
+import styles from './styles.module.css'; // Import css modules stylesheet as styles
 
 // ------------------------------------------------------
-
 const EMPTY_CONTENT =
   '{"root":{"children":[{"children":[],"direction":null,"format":"","indent":0,"type":"paragraph","version":1}],"direction":null,"format":"","indent":0,"type":"root","version":1}}';
 
@@ -48,7 +53,7 @@ function MyCustomAutoFocusPlugin() {
 
 // ------------------------------------------------------
 function Placeholder({ children }) {
-  return <div className="editorPlaceholder" data-ft="placeholder">{children}</div>;
+  return <div className={styles.editorPlaceholder} data-ft="placeholder">{children}</div>;
 }
 // ------------------------------------------------------
 
@@ -63,31 +68,40 @@ export default ({ value = EMPTY_CONTENT,
     language : "en",
     languageTools: false,
     placeholder : null,
+    format: "raw"
   }
 }) => {
   const locale = i18n[configuration.language];
+  const isRtl = configuration.language == "ur" ? true : false;
   const [editorState, setEditorState] = useState(value);
   const initialConfig = {
     namespace: "MyEditor",
-    editorState: editorState,
+    editorState: configuration.format == "markdown" ? () => $convertFromMarkdownString(value, TRANSFORMERS) : value,
     nodes: [...EditorNodes],
     theme: EditorTheme,
     onError,
   };
 
-
-  function onChange(state) {
-    const editorStateJSON = state.toJSON();
-    setEditorState(JSON.stringify(editorStateJSON));
-    setValue(JSON.stringify(editorStateJSON));
+  function onChange(editorState) {
+    if (configuration.format == "markdown") {
+      editorState.read(() => {
+        const markdown = $convertToMarkdownString(TRANSFORMERS);
+        setValue(markdown);
+      });
+    } else {
+      const editorStateJSON = editorState.toJSON();
+      setEditorState(JSON.stringify(editorStateJSON));
+      setValue(JSON.stringify(editorStateJSON));
+    }
   }
 
   return (
+    <div className={ isRtl ? styles.rtl : null }>
       <LexicalComposer initialConfig={initialConfig}>
         { configuration.richText && <ToolbarPlugin configuration={configuration.toolbar} locale={locale} /> }
         { configuration.richText ? <>
           <RichTextPlugin
-            contentEditable={<ContentEditable className="editorInput" />}
+            contentEditable={<ContentEditable className={styles.editorInput} />}
             placeholder={<Placeholder>{configuration.placeholder ??  locale.resources.placeholder }</Placeholder>}
             ErrorBoundary={LexicalErrorBoundary}
           />
@@ -99,13 +113,15 @@ export default ({ value = EMPTY_CONTENT,
         </>
         :
         <PlainTextPlugin
-          contentEditable={<ContentEditable className="editorInput" />}
+          contentEditable={<ContentEditable className={styles.editorInput} />}
           placeholder={<Placeholder>{configuration.placeholder ??  locale.resources.placeholder}</Placeholder>}
           ErrorBoundary={LexicalErrorBoundary}
         /> }
         <HistoryPlugin />
         <MyCustomAutoFocusPlugin />
         <OnChangePlugin onChange={onChange} />
+        {configuration.format == "markdown" && <MarkdownShortcutPlugin transformers={TRANSFORMERS} />}
       </LexicalComposer>
+    </div>
   );
 };

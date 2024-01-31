@@ -51,6 +51,8 @@ import InsertDropDown from "./insertDropDown";
 import Icons from '../icons'
 import CheckButton from "../components/checkButton";
 import AlignFormatDropDown from "./alignFormatDropDown";
+import styles from "../styles.module.css";
+
 // -----------------------------------------------------------
 
 const ToolbarPlugin = ({ configuration = {
@@ -270,14 +272,14 @@ const ToolbarPlugin = ({ configuration = {
   }, [editor, isLink]);
 
   return (
-    <>
+    <div className={styles.toolbar}>
       { configuration.showUndoRedo && <>
       <Tooltip title={locale.resources.undo}>
-        <Button type="text" size="large" onClick={() => activeEditor.dispatchCommand(UNDO_COMMAND, undefined)} disabled={!canUndo}
+        <Button type="text" onClick={() => activeEditor.dispatchCommand(UNDO_COMMAND, undefined)} disabled={!canUndo}
           icon={ locale.isRtl ? <Icons.Redo /> : <Icons.Undo />} />
       </Tooltip>
       <Tooltip title={locale.resources.redo}>
-        <Button type="text" size="large" onClick={() => activeEditor.dispatchCommand(REDO_COMMAND, undefined)} disabled={!canRedo}
+        <Button type="text" onClick={() => activeEditor.dispatchCommand(REDO_COMMAND, undefined)} disabled={!canRedo}
           icon={locale.isRtl ? <Icons.Undo /> : <Icons.Redo /> } />
       </Tooltip>
       <Divider type="vertical" /></> }
@@ -291,15 +293,15 @@ const ToolbarPlugin = ({ configuration = {
         />
       <Divider type="vertical" />
       </> }
-      <CheckButton type="text" size="large" tooltip={locale.resources.bold} checked={isBold} onClick={() => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold")} icon={<Icons.Bold />} />
-      <CheckButton type="text" size="large" tooltip={locale.resources.italic} checked={isItalic} onClick={() => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic")} icon={<Icons.Italic />} />
-      <CheckButton type="text" size="large" tooltip={locale.resources.underline} checked={isUnderline} onClick={() => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "underline")} icon={<Icons.Underline />} />
+      <CheckButton type="text" tooltip={locale.resources.bold} checked={isBold} onClick={() => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold")} icon={<Icons.Bold />} />
+      <CheckButton type="text" tooltip={locale.resources.italic} checked={isItalic} onClick={() => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic")} icon={<Icons.Italic />} />
+      <CheckButton type="text" tooltip={locale.resources.underline} checked={isUnderline} onClick={() => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "underline")} icon={<Icons.Underline />} />
       { configuration.showExtraFormat && <>
-      <CheckButton type="text" size="large" tooltip={locale.resources.strikethrough} checked={isStrikethrough} onClick={() => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "strikethrough")} icon={<Icons.Strikethrough />} />
-      <CheckButton type="text" size="large" tooltip={locale.resources.subscript} checked={isSubscript} onClick={() => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "subscript")} icon={<Icons.SubScript />} />
-      <CheckButton type="text" size="large" tooltip={locale.resources.superscript} checked={isSuperscript} onClick={() => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "superscript")} icon={<Icons.SuperScript />} />
+      <CheckButton type="text" tooltip={locale.resources.strikethrough} checked={isStrikethrough} onClick={() => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "strikethrough")} icon={<Icons.Strikethrough />} />
+      <CheckButton type="text" tooltip={locale.resources.subscript} checked={isSubscript} onClick={() => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "subscript")} icon={<Icons.SubScript />} />
+      <CheckButton type="text" tooltip={locale.resources.superscript} checked={isSuperscript} onClick={() => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "superscript")} icon={<Icons.SuperScript />} />
       </> }
-      { configuration.showInsertLink && <CheckButton type="text" size="large" tooltip={locale.resources.link} checked={isLink} onClick={insertLink} disabled={!isEditable} icon={<Icons.Link />} />}
+      { configuration.showInsertLink && <CheckButton type="text" tooltip={locale.resources.link} checked={isLink} onClick={insertLink} disabled={!isEditable} icon={<Icons.Link />} />}
       { configuration.showFontFormat &&   <>
       <Divider type="vertical" />
       <FontDropDown fonts={configuration.fonts} value={fontFamily} onChange={changeFont} />
@@ -307,7 +309,7 @@ const ToolbarPlugin = ({ configuration = {
       </> }
       { configuration.showAlignment && <><Divider type="vertical" /><AlignFormatDropDown editor={editor} disabled={!isEditable} locale={locale}/></> }
       { configuration.showInsert && <><Divider type="vertical" /><InsertDropDown locale={locale} editor={editor} disabled={!isEditable} /></> }
-    </>
+    </div>
   );
 };
 
