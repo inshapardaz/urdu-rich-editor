@@ -4,7 +4,10 @@
   "description": "Urdu Rich Text Editor for web based on lexical",
   "author": "Muhammad Umer Farooq",
   "license": "MIT",
-  "repository": "inshapardaz/urdu-web-editor",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/inshapardaz/urdu-web-editor.git"
+  },
   "source": "src/index.js",
   "main": "dist/main.js",
   "files": [

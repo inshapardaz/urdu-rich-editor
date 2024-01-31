@@ -26,6 +26,6 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - run: export NODE_OPTIONS=--openssl-legacy-provider
       - run: npm ci
-      - run: npm run build
+      - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
