@@ -1,6 +1,6 @@
 {
   "name": "urdu-web-editor",
-  "version": "1.0.0-beta.5",
+  "version": "1.0.0-beta.6",
   "description": "Urdu Rich Text Editor for web based on lexical",
   "author": "Muhammad Umer Farooq",
   "license": "MIT",
@@ -9,8 +9,7 @@
     "url": "git+https://github.com/inshapardaz/urdu-web-editor.git"
   },
   "source": "src/index.js",
-  "main": "dist/main.js",
-  "module": "dist/main.js",
+  "module": "dist/index.js",
   "files": [
     "css",
     "es",
