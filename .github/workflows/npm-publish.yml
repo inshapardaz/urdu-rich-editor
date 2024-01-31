@@ -28,5 +28,4 @@ jobs:
       - run: npm ci
       - run: npm run build
         env:
-          NODE_OPTIONS: --openssl-legacy-provider
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
