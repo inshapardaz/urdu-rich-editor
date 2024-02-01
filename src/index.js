@@ -73,10 +73,10 @@ export default ({ value = EMPTY_CONTENT,
 }) => {
   const locale = i18n[configuration.language];
   const isRtl = configuration.language == "ur" ? true : false;
-  const [editorState, setEditorState] = useState(value);
+  const [editorState, setEditorState] = useState(value !== null & value === EMPTY_CONTENT && format == 'markdown'? ' ' : EMPTY_CONTENT);
   const initialConfig = {
     namespace: "MyEditor",
-    editorState: configuration.format == "markdown" ? () => $convertFromMarkdownString(value, TRANSFORMERS) : value,
+    editorState: configuration.format == "markdown" ? () => value == null ? '' : $convertFromMarkdownString(value, TRANSFORMERS) : value,
     nodes: [...EditorNodes],
     theme: EditorTheme,
     onError,
