@@ -34,6 +34,7 @@ export default {
       insert: "Insert",
       horizontalRule: "Horizontal Rule",
       image: "Insert Image",
+      save: "Save",
     },
   },
   'ur': {
@@ -71,6 +72,7 @@ export default {
       insert: "متفرقات",
       horizontalRule: "افقی قاعدہ",
       image: "تصویر شامل کریں",
+      save: "محفوظ کریں",
     }
   }
 }

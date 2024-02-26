@@ -3,14 +3,14 @@ import { render } from "react-dom";
 
 import Editor from "../../src";
 import styles from "../../src/styles.module.css";
-import { ConfigProvider, Divider, Drawer, FloatButton, Select, Space, Switch } from "antd";
+import { Button, ConfigProvider, Divider, Drawer, FloatButton, Select, Space, Switch } from "antd";
 import Icons from "../../src/icons";
 
 import i18n from "../../src/i18n";
 
 const Demo = () => {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
+  const [value, setValue] = useState("# this is heading\n\nThis is a paragraph");
   const [configuration, setConfiguration] = useState({
     richText: true,
     language: "en",
@@ -23,7 +23,9 @@ const Demo = () => {
       showUndoRedo: true,
       showExtraFormat: true,
       showInsertLink: true,
+      showSave: true,
     },
+    onSave: (contents) => console.log(contents),
     format: "raw",
   });
   const locale = i18n[configuration.language];
@@ -154,6 +156,10 @@ const Demo = () => {
                 setConfiguration((e) => ({ ...e, toolbar: {... e.toolbar, showInsertLink : checked } }))
               }
             />
+          <Divider />
+          <Button onClick={() => setValue(Date.now())}>
+              Change Value
+          </Button>
         </Space>
       </Drawer>
     </ConfigProvider>

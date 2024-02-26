@@ -52,6 +52,7 @@ import Icons from '../icons'
 import CheckButton from "../components/checkButton";
 import AlignFormatDropDown from "./alignFormatDropDown";
 import styles from "../styles.module.css";
+import { SAVE_COMMAND } from '../commands/saveCommand';
 
 // -----------------------------------------------------------
 
@@ -66,6 +67,8 @@ const ToolbarPlugin = ({ configuration = {
   showUndoRedo: true,
   showExtraFormat: true,
   showInsertLink: true,
+  showSave: false,
+  onSave: () => {}
 }, locale }) => {
   const [editor] = useLexicalComposerContext();
   const [activeEditor, setActiveEditor] = useState(editor);
@@ -273,6 +276,10 @@ const ToolbarPlugin = ({ configuration = {
 
   return (
     <div className={styles.toolbar}>
+      { configuration.showSave && <Tooltip title={locale.resources.save}>
+        <Button type="text" onClick={() => editor.dispatchCommand(SAVE_COMMAND) } disabled={!canUndo}
+          icon={ <Icons.Save /> } />
+      </Tooltip>}
       { configuration.showUndoRedo && <>
       <Tooltip title={locale.resources.undo}>
         <Button type="text" onClick={() => activeEditor.dispatchCommand(UNDO_COMMAND, undefined)} disabled={!canUndo}

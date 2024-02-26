@@ -24,11 +24,13 @@ import ToolbarPlugin from "./plugins/toolbar";
 import AutoLinkPlugin from './plugins/autoLink.Plugin';
 import { HorizontalRulePlugin } from './plugins/horizontalRulePlugin';
 import LinkPlugin from './plugins/link.Plugin';
+import { ControlledValuePlugin } from './plugins/controlledValuePlugin';
 import EditorNodes from "./nodes";
 import EditorTheme from './themes/editorTheme'
 // ------------------------------------------------------
 import i18n  from './i18n';
 import styles from './styles.module.css'; // Import css modules stylesheet as styles
+import { SavePlugin } from './commands/saveCommand';
 
 // ------------------------------------------------------
 const EMPTY_CONTENT =
@@ -58,13 +60,14 @@ function Placeholder({ children }) {
 // ------------------------------------------------------
 
 export default ({ value = EMPTY_CONTENT,
-  setValue = () => {},
+  onChange = () => {},
   configuration = {
     richText : false,
     toolbar : {
       fonts : null,
-      fontSizes: null,
+      fontSizes: null
     },
+    onSave: () => {},
     language : "en",
     languageTools: false,
     placeholder : null,
@@ -76,24 +79,24 @@ export default ({ value = EMPTY_CONTENT,
   const [editorState, setEditorState] = useState(value !== null & value === EMPTY_CONTENT && configuration.format == 'markdown'? ' ' : EMPTY_CONTENT);
   const initialConfig = {
     namespace: "MyEditor",
-    editorState: configuration.format == "markdown" ? () => value == null ? '' : $convertFromMarkdownString(value, TRANSFORMERS) : value,
+    editorState: editorState,
     nodes: [...EditorNodes],
     theme: EditorTheme,
     onError,
   };
 
-  function onChange(editorState) {
-    if (configuration.format == "markdown") {
-      editorState.read(() => {
-        const markdown = $convertToMarkdownString(TRANSFORMERS);
-        setValue(markdown);
-      });
-    } else {
-      const editorStateJSON = editorState.toJSON();
-      setEditorState(JSON.stringify(editorStateJSON));
-      setValue(JSON.stringify(editorStateJSON));
-    }
-  }
+  // function onChange(editorState) {
+  //   if (configuration.format == "markdown") {
+  //     editorState.read(() => {
+  //       const markdown = $convertToMarkdownString(TRANSFORMERS);
+  //       setValue(markdown);
+  //     });
+  //   } else {
+  //     const editorStateJSON = editorState.toJSON();
+  //     setEditorState(JSON.stringify(editorStateJSON));
+  //     setValue(JSON.stringify(editorStateJSON));
+  //   }
+  // }
 
   return (
     <div className={ isRtl ? styles.rtl : null }>
@@ -119,7 +122,12 @@ export default ({ value = EMPTY_CONTENT,
         /> }
         <HistoryPlugin />
         <MyCustomAutoFocusPlugin />
-        <OnChangePlugin onChange={onChange} />
+        { configuration?.toolbar?.showSave && <SavePlugin onSave={configuration.onSave} /> }
+        <ControlledValuePlugin
+          value={value}
+          onChange={onChange}
+          format={configuration.format }
+          isRichtext={configuration.richText} />
         {configuration.format == "markdown" && <MarkdownShortcutPlugin transformers={TRANSFORMERS} />}
       </LexicalComposer>
     </div>
