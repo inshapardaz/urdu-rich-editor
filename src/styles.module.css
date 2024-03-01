@@ -72,7 +72,7 @@ code {
   border-top-right-radius: 10px;
 }
 
-.editor-scroller {
+.editorScroller {
   min-height: 150px;
   border: 0;
   display: flex;
@@ -89,3 +89,119 @@ code {
   resize: vertical;
   z-index: -1;
 }
+
+/*** floatingLinkEditor Starts *****/
+.linkEditor {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  max-width: 400px;
+  width: 100%;
+  opacity: 0;
+  background-color: #fff;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+  border-radius: 0 0 8px 8px;
+  transition: opacity 0.5s;
+  will-change: transform;
+}
+
+.linkEditorContents {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 8px 12px;
+}
+
+.linkEditor .button {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  padding: 6px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin: 0 2px;
+}
+
+.linkEditor .button.hovered {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  background-color: #eee;
+}
+
+.linkEditor .button i,
+.actions i {
+  background-size: contain;
+  display: inline-block;
+  height: 20px;
+  width: 20px;
+  vertical-align: -0.25em;
+}
+
+.linkEditor .linkInput {
+  display: block;
+  width: calc(100% - 75px);
+  box-sizing: border-box;
+  margin: 12px 12px;
+  padding: 8px 12px;
+  border-radius: 15px;
+  background-color: #eee;
+  font-size: 15px;
+  color: rgb(5, 5, 5);
+  border: 0;
+  outline: 0;
+  position: relative;
+  font-family: inherit;
+}
+
+.linkEditor .linkView {
+  display: block;
+  width: calc(100% - 24px);
+  margin: 8px 12px;
+  padding: 8px 12px;
+  border-radius: 15px;
+  font-size: 15px;
+  color: rgb(5, 5, 5);
+  border: 0;
+  outline: 0;
+  position: relative;
+  font-family: inherit;
+}
+
+.linkEditor a {
+  word-break: break-word;
+  width: calc(100% - 33px);
+  margin: 8px 12px;
+  padding: 8px 12px;
+}
+
+.linkEditor .linkInput a {
+  color: rgb(33, 111, 219);
+  text-decoration: underline;
+  white-space: nowrap;
+  overflow: hidden;
+  margin-right: 30px;
+  text-overflow: ellipsis;
+}
+
+.linkEditor .linkInput a:hover {
+  text-decoration: underline;
+}
+
+.linkEditor .font-size-wrapper,
+.linkEditor .font-family-wrapper {
+  display: flex;
+  margin: 0 4px;
+}
+
+.linkEditor select {
+  padding: 6px;
+  border: none;
+  background-color: rgba(0, 0, 0, 0.075);
+  border-radius: 4px;
+}
+
+/*** floatingLinkEditor Ends *****/

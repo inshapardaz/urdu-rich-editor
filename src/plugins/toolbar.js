@@ -69,7 +69,7 @@ const ToolbarPlugin = ({ configuration = {
   showInsertLink: true,
   showSave: false,
   onSave: () => {}
-}, locale }) => {
+}, setIsLinkEditMode, locale }) => {
   const [editor] = useLexicalComposerContext();
   const [activeEditor, setActiveEditor] = useState(editor);
   const [isRTL, setIsRTL] = useState(false);
@@ -268,8 +268,10 @@ const ToolbarPlugin = ({ configuration = {
 
   const insertLink = useCallback(() => {
     if (!isLink) {
+      setIsLinkEditMode(true);
       editor.dispatchCommand(TOGGLE_LINK_COMMAND, sanitizeUrl('https://'));
     } else {
+      setIsLinkEditMode(false);
       editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
     }
   }, [editor, isLink]);
@@ -277,7 +279,7 @@ const ToolbarPlugin = ({ configuration = {
   return (
     <div className={styles.toolbar}>
       { configuration.showSave && <Tooltip title={locale.resources.save}>
-        <Button type="text" onClick={() => editor.dispatchCommand(SAVE_COMMAND) } disabled={!canUndo}
+        <Button type="text" onClick={() => editor.dispatchCommand(SAVE_COMMAND) }
           icon={ <Icons.Save /> } />
       </Tooltip>}
       { configuration.showUndoRedo && <>

@@ -18,6 +18,7 @@ import {
   TRANSFORMERS,
 } from '@lexical/markdown';
 import { MarkdownShortcutPlugin } from '@lexical/react/LexicalMarkdownShortcutPlugin';
+import {CAN_USE_DOM} from './utils/canUseDOM';
 
 // ------------------------------------------------------
 import ToolbarPlugin from "./plugins/toolbar";
@@ -25,6 +26,7 @@ import AutoLinkPlugin from './plugins/autoLink.Plugin';
 import { HorizontalRulePlugin } from './plugins/horizontalRulePlugin';
 import LinkPlugin from './plugins/link.Plugin';
 import { ControlledValuePlugin } from './plugins/controlledValuePlugin';
+import FloatingLinkEditorPlugin from './plugins/floatingLinkEditorPlugin';
 import EditorNodes from "./nodes";
 import EditorTheme from './themes/editorTheme'
 // ------------------------------------------------------
@@ -76,6 +78,7 @@ export default ({ value = EMPTY_CONTENT,
 }) => {
   const locale = i18n[configuration.language];
   const isRtl = configuration.language == "ur" ? true : false;
+  const [isSmallWidthViewport, setIsSmallWidthViewport] = useState(false);
   const [editorState, setEditorState] = useState(value !== null & value === EMPTY_CONTENT && configuration.format == 'markdown'? ' ' : EMPTY_CONTENT);
   const initialConfig = {
     namespace: "MyEditor",
@@ -84,27 +87,44 @@ export default ({ value = EMPTY_CONTENT,
     theme: EditorTheme,
     onError,
   };
+  const [isLinkEditMode, setIsLinkEditMode] = useState(false);
+  const [floatingAnchorElem, setFloatingAnchorElem] = useState(null);
+  const onRef = (_floatingAnchorElem) => {
+    if (_floatingAnchorElem !== null) {
+      setFloatingAnchorElem(_floatingAnchorElem);
+    }
+  };
 
-  // function onChange(editorState) {
-  //   if (configuration.format == "markdown") {
-  //     editorState.read(() => {
-  //       const markdown = $convertToMarkdownString(TRANSFORMERS);
-  //       setValue(markdown);
-  //     });
-  //   } else {
-  //     const editorStateJSON = editorState.toJSON();
-  //     setEditorState(JSON.stringify(editorStateJSON));
-  //     setValue(JSON.stringify(editorStateJSON));
-  //   }
-  // }
+  useEffect(() => {
+    const updateViewPortWidth = () => {
+      const isNextSmallWidthViewport =
+        CAN_USE_DOM && window.matchMedia('(max-width: 1025px)').matches;
+
+      if (isNextSmallWidthViewport !== isSmallWidthViewport) {
+        setIsSmallWidthViewport(isNextSmallWidthViewport);
+      }
+    };
+    updateViewPortWidth();
+    window.addEventListener('resize', updateViewPortWidth);
+
+    return () => {
+      window.removeEventListener('resize', updateViewPortWidth);
+    };
+  }, [isSmallWidthViewport]);
 
   return (
     <div className={ isRtl ? styles.rtl : null }>
       <LexicalComposer initialConfig={initialConfig}>
-        { configuration.richText && <ToolbarPlugin configuration={configuration.toolbar} locale={locale} /> }
+        { configuration.richText && <ToolbarPlugin configuration={configuration.toolbar} setIsLinkEditMode={setIsLinkEditMode} locale={locale} /> }
         { configuration.richText ? <>
           <RichTextPlugin
-            contentEditable={<ContentEditable className={styles.editorInput} />}
+            contentEditable={
+              <div className={styles.editorScroller}>
+                <div className={styles.editor} ref={onRef}>
+                  <ContentEditable className={styles.editorInput}/>
+                </div>
+              </div>
+            }
             placeholder={<Placeholder>{configuration.placeholder ??  locale.resources.placeholder }</Placeholder>}
             ErrorBoundary={LexicalErrorBoundary}
           />
@@ -113,6 +133,24 @@ export default ({ value = EMPTY_CONTENT,
           <AutoLinkPlugin />
           <LinkPlugin />
           <HorizontalRulePlugin />
+          {floatingAnchorElem && !isSmallWidthViewport && (
+              <>
+                {/* <DraggableBlockPlugin anchorElem={floatingAnchorElem} />
+                <CodeActionMenuPlugin anchorElem={floatingAnchorElem} /> */}
+                <FloatingLinkEditorPlugin
+                  anchorElem={floatingAnchorElem}
+                  isLinkEditMode={isLinkEditMode}
+                  setIsLinkEditMode={setIsLinkEditMode}
+                />
+                {/* <TableCellActionMenuPlugin
+                  anchorElem={floatingAnchorElem}
+                  cellMerge={true}
+                />
+                <FloatingTextFormatToolbarPlugin
+                  anchorElem={floatingAnchorElem}
+                /> */}
+              </>
+            )}
         </>
         :
         <PlainTextPlugin
