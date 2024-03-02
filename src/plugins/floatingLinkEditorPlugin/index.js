@@ -1,3 +1,4 @@
+import './index.css';
 import {
   $createLinkNode,
   $isAutoLinkNode,
@@ -21,12 +22,11 @@ import {useCallback, useEffect, useRef, useState} from 'react';
 import * as React from 'react';
 import {createPortal} from 'react-dom';
 
-import {getSelectedNode} from '../utils/getSelectedNode';
-import {setFloatingElemPositionForLinkEditor} from '../utils/setFloatingElemPositionForLinkEditor';
-import {sanitizeUrl} from '../utils/url';
-import styles from "../styles.module.css";
+import {getSelectedNode} from '../../utils/getSelectedNode';
+import {setFloatingElemPositionForLinkEditor} from '../../utils/setFloatingElemPositionForLinkEditor';
+import {sanitizeUrl} from '../../utils/url';
 import { Button, Input } from 'antd';
-import Icons from '../icons';
+import Icons from '../../icons';
 
 function FloatingLinkEditor({
   editor,
@@ -191,15 +191,14 @@ function FloatingLinkEditor({
           }
         });
       }
-      setEditedLinkUrl('https://');
       setIsLinkEditMode(false);
     }
   };
 
   return (
-    <div ref={editorRef} className={styles.linkEditor}>
+    <div ref={editorRef} className="link-editor">
       {!isLink ? null : isLinkEditMode ? (
-        <div className={styles.linkEditorContents}>
+        <div className="link-editor-contents">
           <Input
             addonAfter={<>
               <Button type='text' tabIndex={0} size='small'
@@ -221,7 +220,7 @@ function FloatingLinkEditor({
             }} />
         </div>
       ) : (
-        <div className={styles.linkEditorContents}>
+        <div className="link-editor-contents">
           <Input disabled
             addonAfter={<>
               <Button type='text' tabIndex={0} size='small'
