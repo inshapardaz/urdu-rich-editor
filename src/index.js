@@ -27,6 +27,7 @@ import LinkPlugin from './plugins/link.Plugin';
 import { ControlledValuePlugin } from './plugins/controlledValuePlugin';
 import FloatingLinkEditorPlugin from './plugins/floatingLinkEditorPlugin';
 import DraggableBlockPlugin from './plugins/draggableBlockPlugin';
+import FloatingTextFormatToolbarPlugin from './plugins/FloatingTextFormatToolbarPlugin';
 import EditorNodes from "./nodes";
 import EditorTheme from './themes/editorTheme'
 import ContentEditable from './ui/contentEditable';
@@ -146,10 +147,10 @@ export default ({ value = EMPTY_CONTENT,
                 {/* <TableCellActionMenuPlugin
                   anchorElem={floatingAnchorElem}
                   cellMerge={true}
-                />
+                />*/}
                 <FloatingTextFormatToolbarPlugin
                   anchorElem={floatingAnchorElem}
-                /> */}
+                />
               </>
             )}
         </>
