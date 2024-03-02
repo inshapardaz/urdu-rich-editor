@@ -5,7 +5,6 @@ import React, {useEffect, useState } from 'react'
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { PlainTextPlugin } from "@lexical/react/LexicalPlainTextPlugin";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
-import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { CheckListPlugin } from '@lexical/react/LexicalCheckListPlugin';
 import { ListPlugin } from '@lexical/react/LexicalListPlugin';
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
@@ -27,8 +26,10 @@ import { HorizontalRulePlugin } from './plugins/horizontalRulePlugin';
 import LinkPlugin from './plugins/link.Plugin';
 import { ControlledValuePlugin } from './plugins/controlledValuePlugin';
 import FloatingLinkEditorPlugin from './plugins/floatingLinkEditorPlugin';
+import DraggableBlockPlugin from './plugins/draggableBlockPlugin';
 import EditorNodes from "./nodes";
 import EditorTheme from './themes/editorTheme'
+import ContentEditable from './ui/contentEditable';
 // ------------------------------------------------------
 import i18n  from './i18n';
 import styles from './styles.module.css'; // Import css modules stylesheet as styles
@@ -121,7 +122,7 @@ export default ({ value = EMPTY_CONTENT,
             contentEditable={
               <div className={styles.editorScroller}>
                 <div className={styles.editor} ref={onRef}>
-                  <ContentEditable className={styles.editorInput}/>
+                  <ContentEditable />
                 </div>
               </div>
             }
@@ -135,8 +136,8 @@ export default ({ value = EMPTY_CONTENT,
           <HorizontalRulePlugin />
           {floatingAnchorElem && !isSmallWidthViewport && (
               <>
-                {/* <DraggableBlockPlugin anchorElem={floatingAnchorElem} />
-                <CodeActionMenuPlugin anchorElem={floatingAnchorElem} /> */}
+                <DraggableBlockPlugin anchorElem={floatingAnchorElem} />
+                {/* <CodeActionMenuPlugin anchorElem={floatingAnchorElem} /> */}
                 <FloatingLinkEditorPlugin
                   anchorElem={floatingAnchorElem}
                   isLinkEditMode={isLinkEditMode}
@@ -154,7 +155,7 @@ export default ({ value = EMPTY_CONTENT,
         </>
         :
         <PlainTextPlugin
-          contentEditable={<ContentEditable className={styles.editorInput} />}
+          contentEditable={<ContentEditable />}
           placeholder={<Placeholder>{configuration.placeholder ??  locale.resources.placeholder}</Placeholder>}
           ErrorBoundary={LexicalErrorBoundary}
         /> }

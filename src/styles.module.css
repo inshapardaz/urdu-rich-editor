@@ -90,6 +90,16 @@ code {
   z-index: -1;
 }
 
+.contentEditable {
+  border: 0;
+  font-size: 15px;
+  display: block;
+  position: relative;
+  outline: 0;
+  padding: 8px 28px 40px;
+  min-height: 150px;
+}
+
 /*** floatingLinkEditor Starts *****/
 .linkEditor {
   display: flex;
