@@ -8,12 +8,9 @@ import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { CheckListPlugin } from '@lexical/react/LexicalCheckListPlugin';
 import { ListPlugin } from '@lexical/react/LexicalListPlugin';
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
-import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
 import {
-  $convertFromMarkdownString,
-  $convertToMarkdownString,
   TRANSFORMERS,
 } from '@lexical/markdown';
 import { MarkdownShortcutPlugin } from '@lexical/react/LexicalMarkdownShortcutPlugin';
@@ -35,6 +32,7 @@ import ContentEditable from './ui/contentEditable';
 import i18n  from './i18n';
 import styles from './styles.module.css'; // Import css modules stylesheet as styles
 import { SavePlugin } from './commands/saveCommand';
+import SpellCheckerPlugin from './plugins/spellchecker';
 
 // ------------------------------------------------------
 const EMPTY_CONTENT =
@@ -69,13 +67,19 @@ export default ({ value = EMPTY_CONTENT,
     richText : false,
     toolbar : {
       fonts : null,
-      fontSizes: null
+      fontSizes: null,
     },
     onSave: () => {},
     language : "en",
     languageTools: false,
     placeholder : null,
-    format: "raw"
+    format: "raw",
+    spellchecker : {
+      enabled: false,
+      punctuationCorrections: () => [],
+      autoCorrections: () => [],
+      wordList : () => [],
+    }
   }
 }) => {
   const locale = i18n[configuration.language];
@@ -117,7 +121,7 @@ export default ({ value = EMPTY_CONTENT,
   return (
     <div className={ isRtl ? styles.rtl : null }>
       <LexicalComposer initialConfig={initialConfig}>
-        { configuration.richText && <ToolbarPlugin configuration={configuration.toolbar} setIsLinkEditMode={setIsLinkEditMode} locale={locale} /> }
+        { configuration.richText && <ToolbarPlugin configuration={configuration} setIsLinkEditMode={setIsLinkEditMode} locale={locale} /> }
         { configuration.richText ? <>
           <RichTextPlugin
             contentEditable={
@@ -163,6 +167,7 @@ export default ({ value = EMPTY_CONTENT,
         <HistoryPlugin />
         <MyCustomAutoFocusPlugin />
         { configuration?.toolbar?.showSave && <SavePlugin onSave={configuration.onSave} /> }
+        <SpellCheckerPlugin locale={locale} language={configuration.language} configuration={configuration.spellchecker} />
         <ControlledValuePlugin
           value={value}
           onChange={onChange}

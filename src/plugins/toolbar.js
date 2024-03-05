@@ -48,27 +48,28 @@ import FontDropDown from "./fontDropdown";
 import FontSizeDropDown from "./fontSizeDropdown";
 import BlockFormatDropDown, { blockTypeToBlockName } from './blockFormatDropDown';
 import InsertDropDown from "./insertDropDown";
+import ToolsDropdown from "./toolsDropDown";
 import Icons from '../icons'
 import CheckButton from "../components/checkButton";
 import AlignFormatDropDown from "./alignFormatDropDown";
 import styles from "../styles.module.css";
 import { SAVE_COMMAND } from '../commands/saveCommand';
-
 // -----------------------------------------------------------
 
 const ToolbarPlugin = ({ configuration = {
-  fonts : null,
-  fontSizes : null,
-  showAlignment: true,
-  showBlockFormat: true,
-  showFontFormat: true,
-  showInsert: true,
-  showListFormat: true,
-  showUndoRedo: true,
-  showExtraFormat: true,
-  showInsertLink: true,
-  showSave: false,
-  onSave: () => {}
+  toolbar : {
+    fonts : null,
+    fontSizes : null,
+    showAlignment: true,
+    showBlockFormat: true,
+    showFontFormat: true,
+    showInsert: true,
+    showListFormat: true,
+    showUndoRedo: true,
+    showExtraFormat: true,
+    showInsertLink: true,
+    showSave: false,
+  }
 }, setIsLinkEditMode, locale }) => {
   const [editor] = useLexicalComposerContext();
   const [activeEditor, setActiveEditor] = useState(editor);
@@ -278,11 +279,11 @@ const ToolbarPlugin = ({ configuration = {
 
   return (
     <div className={styles.toolbar}>
-      { configuration.showSave && <Tooltip title={locale.resources.save}>
+      { configuration.toolbar.showSave && <Tooltip title={locale.resources.save}>
         <Button type="text" onClick={() => editor.dispatchCommand(SAVE_COMMAND) }
           icon={ <Icons.Save /> } />
       </Tooltip>}
-      { configuration.showUndoRedo && <>
+      { configuration.toolbar.showUndoRedo && <>
       <Tooltip title={locale.resources.undo}>
         <Button type="text" onClick={() => activeEditor.dispatchCommand(UNDO_COMMAND, undefined)} disabled={!canUndo}
           icon={ locale.isRtl ? <Icons.Redo /> : <Icons.Undo />} />
@@ -292,7 +293,7 @@ const ToolbarPlugin = ({ configuration = {
           icon={locale.isRtl ? <Icons.Undo /> : <Icons.Redo /> } />
       </Tooltip>
       <Divider type="vertical" /></> }
-      { configuration.showBlockFormat && <>
+      { configuration.toolbar.showBlockFormat && <>
       <BlockFormatDropDown
             disabled={!isEditable}
             blockType={blockType}
@@ -305,19 +306,24 @@ const ToolbarPlugin = ({ configuration = {
       <CheckButton type="text" tooltip={locale.resources.bold} checked={isBold} onClick={() => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold")} icon={<Icons.Bold />} />
       <CheckButton type="text" tooltip={locale.resources.italic} checked={isItalic} onClick={() => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic")} icon={<Icons.Italic />} />
       <CheckButton type="text" tooltip={locale.resources.underline} checked={isUnderline} onClick={() => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "underline")} icon={<Icons.Underline />} />
-      { configuration.showExtraFormat && <>
+      { configuration.toolbar.showExtraFormat && <>
       <CheckButton type="text" tooltip={locale.resources.strikethrough} checked={isStrikethrough} onClick={() => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "strikethrough")} icon={<Icons.Strikethrough />} />
       <CheckButton type="text" tooltip={locale.resources.subscript} checked={isSubscript} onClick={() => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "subscript")} icon={<Icons.SubScript />} />
       <CheckButton type="text" tooltip={locale.resources.superscript} checked={isSuperscript} onClick={() => activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "superscript")} icon={<Icons.SuperScript />} />
       </> }
-      { configuration.showInsertLink && <CheckButton type="text" tooltip={locale.resources.link} checked={isLink} onClick={insertLink} disabled={!isEditable} icon={<Icons.Link />} />}
-      { configuration.showFontFormat &&   <>
+      { configuration.toolbar.showInsertLink && <CheckButton type="text" tooltip={locale.resources.link} checked={isLink} onClick={insertLink} disabled={!isEditable} icon={<Icons.Link />} />}
+      { configuration.toolbar.showFontFormat &&   <>
       <Divider type="vertical" />
-      <FontDropDown fonts={configuration.fonts} value={fontFamily} onChange={changeFont} />
-      <FontSizeDropDown fontSizes={configuration.fontSizes} value={fontSize} onChange={changeFontSize} />
+      <FontDropDown fonts={configuration.toolbar.fonts} value={fontFamily} onChange={changeFont} />
+      <FontSizeDropDown fontSizes={configuration.toolbar.fontSizes} value={fontSize} onChange={changeFontSize} />
       </> }
-      { configuration.showAlignment && <><Divider type="vertical" /><AlignFormatDropDown editor={editor} disabled={!isEditable} locale={locale}/></> }
-      { configuration.showInsert && <><Divider type="vertical" /><InsertDropDown locale={locale} editor={editor} disabled={!isEditable} /></> }
+      { configuration.toolbar.showAlignment && <><Divider type="vertical" /><AlignFormatDropDown editor={editor} disabled={!isEditable} locale={locale}/></> }
+      { configuration.toolbar.showInsert && <><Divider type="vertical" /><InsertDropDown locale={locale} editor={editor} disabled={!isEditable} /></> }
+      { configuration.spellchecker.enabled && <>
+        <Divider type="vertical" />
+        <ToolsDropdown locale={locale} editor={editor} disabled={!isEditable} />
+        </>
+      }
     </div>
   );
 };

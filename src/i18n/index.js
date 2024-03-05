@@ -35,6 +35,10 @@ export default {
       horizontalRule: "Horizontal Rule",
       image: "Insert Image",
       save: "Save",
+      spellcheck: "Spellcheck",
+      punctuation: "Punctuation",
+      autoCorrect: "Auto Correct",
+      tools: "Tools",
     },
   },
   'ur': {
@@ -73,6 +77,10 @@ export default {
       horizontalRule: "افقی قاعدہ",
       image: "تصویر شامل کریں",
       save: "محفوظ کریں",
+      spellcheck: "تصحیح",
+      punctuation: "املا",
+      autoCorrect: "خودکار تصحیح",
+      tools: "آلات",
     }
   }
 }

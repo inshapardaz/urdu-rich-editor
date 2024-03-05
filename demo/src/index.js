@@ -7,13 +7,16 @@ import { Button, ConfigProvider, Divider, Drawer, FloatButton, Select, Space, Sw
 import Icons from "../../src/icons";
 
 import i18n from "../../src/i18n";
+import punctuationCorrections from "./punctuationCorrections";
+import wordList from './wordList';
+import autoCorrection from './autoCorrection';
 
 const Demo = () => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("# this is heading\n\nThis is a paragraph");
   const [configuration, setConfiguration] = useState({
     richText: true,
-    language: "en",
+    language: "ur",
     toolbar: {
       showAlignment: true,
       showBlockFormat: true,
@@ -24,6 +27,12 @@ const Demo = () => {
       showExtraFormat: true,
       showInsertLink: true,
       showSave: true,
+    },
+    spellchecker: {
+      enabled : true,
+      punctuationCorrections: (lang) => punctuationCorrections[lang],
+      autoCorrections: (lang) => autoCorrection[lang],
+      wordList : (lang) => wordList[lang]
     },
     onSave: (contents) => console.log(contents),
     format: "raw",
@@ -154,6 +163,15 @@ const Demo = () => {
               defaultChecked={configuration.toolbar.showInsertLink}
               onChange={(checked) =>
                 setConfiguration((e) => ({ ...e, toolbar: {... e.toolbar, showInsertLink : checked } }))
+              }
+            />
+          <Divider />
+          <Switch
+              checkedChildren="Spell Check"
+              unCheckedChildren="No Spell Check"
+              defaultChecked={configuration.spellchecker.enabled}
+              onChange={(checked) =>
+                setConfiguration((e) => ({ ...e, spellchecker: {... e.spellchecker, enabled : checked } }))
               }
             />
           <Divider />
