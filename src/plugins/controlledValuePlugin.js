@@ -1,62 +1,45 @@
 import React, { useEffect } from "react";
 
-import {
-  $getSelection,
-  $getRoot,
-  $createParagraphNode,
-  $createTextNode,
-  $setSelection} from "lexical";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
+import { $convertFromMarkdownString, $convertToMarkdownString, TRANSFORMERS } from "@lexical/markdown";
 
 export const ControlledValuePlugin = ({ value, onChange, isRichtext, format }) => {
-  useAdoptPlaintextValue(value, isRichtext);
+  useAdoptPlaintextValue(value, isRichtext, format);
 
-  const handleChange = (editorState) => {
+  const handleChange = (editorState, editor) => {
     editorState.read(() => {
-      onChange(editorState);
+      if (format === "markdown") {
+        editor.update(() => {
+          const markdown = $convertToMarkdownString(TRANSFORMERS);
+          onChange(markdown);
+        });
+      } else {
+        const editorState = editor.getEditorState();
+        const json = editorState.toJSON();
+        onChange(json);
+      }
     });
   };
 
   return <OnChangePlugin onChange={handleChange} />;
 };
 
-export const useAdoptPlaintextValue = (value, isRichtext) => {
+export const useAdoptPlaintextValue = (value, isRichText, format) => {
   const [editor] = useLexicalComposerContext();
 
   useEffect(() => {
-    editor.update(() => {
-      console.log(`Value updated %o`, value);
-      if (isRichtext) {
-        const paragraphNode = $createParagraphNode();
-        const textNode = $createTextNode(value);
-        paragraphNode.append(textNode);
-        $getRoot().clear();
-        $getRoot().append(paragraphNode);
-      } else {
-        const root = $getRoot();
-        root.append(paragraphNode);
-        const initialSelection = $getSelection()?.clone() ?? null;
-        $getRoot().clear();
-        $getRoot().select(); // for some reason this is not even necessary
-        $getSelection()?.insertText(value);
-        $setSelection(initialSelection);
-      }
-    });
+    if (value)
+    {
+      editor.update(() => {
+        if (format === "markdown") {
+          $convertFromMarkdownString(value, TRANSFORMERS);
+        } else {
+          const editorState = editor.parseEditorState(value)
+          editor.setEditorState(editorState);
+        }
+      });
+    }
   }, [value, editor]);
 };
-
-// export const useAdoptPlaintextValue = (value: string) => {
-//   const [editor] = useLexicalComposerContext();
-
-//   useEffect(() => {
-//     editor.update(() => {
-//       const paragraph = $createParagraphNode();
-//       const text = $createTextNode(value);
-//       paragraph.append(text);
-//       $getRoot().clear();
-//       $getRoot().append(paragraph);
-//     });
-//   }, [value, editor]);
-// };

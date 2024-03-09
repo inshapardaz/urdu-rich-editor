@@ -8,7 +8,6 @@ import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { CheckListPlugin } from '@lexical/react/LexicalCheckListPlugin';
 import { ListPlugin } from '@lexical/react/LexicalListPlugin';
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
-import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
 import {
   TRANSFORMERS,
@@ -21,7 +20,6 @@ import ToolbarPlugin from "./plugins/toolbar";
 import AutoLinkPlugin from './plugins/autoLink.Plugin';
 import { HorizontalRulePlugin } from './plugins/horizontalRulePlugin';
 import LinkPlugin from './plugins/link.Plugin';
-import { ControlledValuePlugin } from './plugins/controlledValuePlugin';
 import FloatingLinkEditorPlugin from './plugins/floatingLinkEditorPlugin';
 import DraggableBlockPlugin from './plugins/draggableBlockPlugin';
 import FloatingTextFormatToolbarPlugin from './plugins/FloatingTextFormatToolbarPlugin';
@@ -30,9 +28,10 @@ import EditorTheme from './themes/editorTheme'
 import ContentEditable from './ui/contentEditable';
 // ------------------------------------------------------
 import i18n  from './i18n';
-import styles from './styles.module.css'; // Import css modules stylesheet as styles
-import { SavePlugin } from './commands/saveCommand';
+import styles from './styles.module.css';
+import SavePlugin from './plugins/savePlugin';
 import SpellCheckerPlugin from './plugins/spellchecker';
+import { ControlledValuePlugin } from './plugins/controlledValuePlugin';
 
 // ------------------------------------------------------
 const EMPTY_CONTENT =
@@ -44,24 +43,13 @@ function onError(error) {
   console.error(error);
 }
 
-function MyCustomAutoFocusPlugin() {
-  const [editor] = useLexicalComposerContext();
-
-  useEffect(() => {
-    // Focus the editor when the effect fires!
-    editor.focus();
-  }, [editor]);
-
-  return null;
-}
-
 // ------------------------------------------------------
 function Placeholder({ children }) {
   return <div className={styles.editorPlaceholder} data-ft="placeholder">{children}</div>;
 }
 // ------------------------------------------------------
 
-export default ({ value = EMPTY_CONTENT,
+export default ({ value = null,
   onChange = () => {},
   configuration = {
     richText : false,
@@ -85,7 +73,7 @@ export default ({ value = EMPTY_CONTENT,
   const locale = i18n[configuration.language];
   const isRtl = configuration.language == "ur" ? true : false;
   const [isSmallWidthViewport, setIsSmallWidthViewport] = useState(false);
-  const [editorState, setEditorState] = useState(value !== null & value === EMPTY_CONTENT && configuration.format == 'markdown'? ' ' : EMPTY_CONTENT);
+  const editorState = value === EMPTY_CONTENT ? configuration.format == 'markdown'? ' ' : EMPTY_CONTENT : value;
   const initialConfig = {
     namespace: "MyEditor",
     editorState: editorState,
@@ -142,16 +130,11 @@ export default ({ value = EMPTY_CONTENT,
           {floatingAnchorElem && !isSmallWidthViewport && (
               <>
                 <DraggableBlockPlugin anchorElem={floatingAnchorElem} />
-                {/* <CodeActionMenuPlugin anchorElem={floatingAnchorElem} /> */}
                 <FloatingLinkEditorPlugin
                   anchorElem={floatingAnchorElem}
                   isLinkEditMode={isLinkEditMode}
                   setIsLinkEditMode={setIsLinkEditMode}
                 />
-                {/* <TableCellActionMenuPlugin
-                  anchorElem={floatingAnchorElem}
-                  cellMerge={true}
-                />*/}
                 <FloatingTextFormatToolbarPlugin
                   anchorElem={floatingAnchorElem}
                 />
@@ -165,8 +148,7 @@ export default ({ value = EMPTY_CONTENT,
           ErrorBoundary={LexicalErrorBoundary}
         /> }
         <HistoryPlugin />
-        <MyCustomAutoFocusPlugin />
-        { configuration?.toolbar?.showSave && <SavePlugin onSave={configuration.onSave} /> }
+        <SavePlugin onSave={configuration.onSave} format={configuration.format }/>
         <SpellCheckerPlugin locale={locale} language={configuration.language} configuration={configuration.spellchecker} />
         <ControlledValuePlugin
           value={value}

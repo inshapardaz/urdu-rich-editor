@@ -13,7 +13,7 @@ import autoCorrection from './autoCorrection';
 
 const Demo = () => {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("# this is heading\n\nThis is a paragraph");
+  const [value, setValue] = useState(undefined);
   const [configuration, setConfiguration] = useState({
     richText: true,
     language: "ur",
@@ -45,6 +45,19 @@ const Demo = () => {
     setOpen(false);
   };
 
+  const setEditorValue = () => {
+    if (configuration.format === "markdown") {
+      setValue(`## حسن کوزہ گر
+
+      جہاں زاد
+      `);
+    }
+    else
+    {
+      setValue('{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"حسن کوزہ گر","type":"text","version":1}],"direction":"rtl","format":"","indent":0,"type":"heading","version":1,"tag":"h1"},{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"جہاں زاد","type":"text","version":1}],"direction":"rtl","format":"","indent":0,"type":"paragraph","version":1}],"direction":"rtl","format":"","indent":0,"type":"root","version":1}}');
+    }
+  }
+
   return (
     <ConfigProvider
       direction={configuration.language == "ur" ? "rtl" : "ltr"}
@@ -55,7 +68,7 @@ const Demo = () => {
         <Editor
           configuration={configuration}
           value={value}
-          setValue={(val) => console.log(val)}
+          onChange={(val) => console.log(val)}
         />
       </div>
       <FloatButton icon={<Icons.Setting />} onClick={showDrawer} />
@@ -175,7 +188,7 @@ const Demo = () => {
               }
             />
           <Divider />
-          <Button onClick={() => setValue(Date.now())}>
+          <Button onClick={setEditorValue}>
               Change Value
           </Button>
         </Space>
