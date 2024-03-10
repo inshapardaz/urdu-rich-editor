@@ -14,6 +14,7 @@ import {
   SELECTION_CHANGE_COMMAND,
   UNDO_COMMAND,
   KEY_MODIFIER_COMMAND,
+  $getRoot,
 } from "lexical";
 import {
   $isCodeNode,
@@ -39,13 +40,12 @@ import { $isHeadingNode } from '@lexical/rich-text';
 import { useCallback, useEffect, useState } from "react";
 
 // -----------------------------------------------------------
-import { Button, Divider, Tooltip } from "antd";
+import { Button, Divider, InputNumber, Tooltip } from "antd";
 // -----------------------------------------------------------
 
 import { sanitizeUrl } from '../utils/url';
 import { getSelectedNode } from '../utils/getSelectedNode';
-import FontDropDown from "./fontDropdown";
-import FontSizeDropDown from "./fontSizeDropdown";
+import FontDropDown, { defaultFont } from "./fontDropdown";
 import BlockFormatDropDown, { blockTypeToBlockName } from './blockFormatDropDown';
 import InsertDropDown from "./insertDropDown";
 import ToolsDropdown from "./toolsDropDown";
@@ -56,21 +56,7 @@ import styles from "../styles.module.css";
 import { SAVE_COMMAND } from '../commands/saveCommand';
 // -----------------------------------------------------------
 
-const ToolbarPlugin = ({ configuration = {
-  toolbar : {
-    fonts : null,
-    fontSizes : null,
-    showAlignment: true,
-    showBlockFormat: true,
-    showFontFormat: true,
-    showInsert: true,
-    showListFormat: true,
-    showUndoRedo: true,
-    showExtraFormat: true,
-    showInsertLink: true,
-    showSave: false,
-  }
-}, setIsLinkEditMode, locale }) => {
+const ToolbarPlugin = ({ configuration, setIsLinkEditMode, locale }) => {
   const [editor] = useLexicalComposerContext();
   const [activeEditor, setActiveEditor] = useState(editor);
   const [isRTL, setIsRTL] = useState(false);
@@ -86,13 +72,27 @@ const ToolbarPlugin = ({ configuration = {
   const [selectedElementKey, setSelectedElementKey] = useState(null);
   const [canUndo, setCanUndo] = useState(false);
   const [canRedo, setCanRedo] = useState(false);
-  const [fontSize, setFontSize] = useState("15px");
+  const [fontSize, setFontSize] = useState(15);
   const [fontColor, setFontColor] = useState("#000");
   const [bgColor, setBgColor] = useState("#fff");
-  const [fontFamily, setFontFamily] = useState("Arial");
+  const [fontFamily, setFontFamily] = useState(configuration.toolbar.defaultFont);
   const [codeLanguage, setCodeLanguage] = useState('');
   const [isLink, setIsLink] = useState(false);
   const isEditable = useLexicalEditable();
+
+  // TODO: Set Default Font
+  useEffect(() => {
+    editor.update(() => {
+      if (!editor || !configuration) return;
+      $getRoot()?.getChildAtIndex(0)?.select();
+      const selection = $getSelection();
+      if (selection) {
+        $patchStyleText(selection, {
+          'font-family': defaultFont(configuration.toolbar.fonts),
+        });
+      }
+    });
+  }, [editor, configuration]);
 
   const $updateToolbar = useCallback(() => {
     const selection = $getSelection();
@@ -167,9 +167,10 @@ const ToolbarPlugin = ({ configuration = {
           }
         }
       }
+
       // Handle buttons
       setFontSize(
-        $getSelectionStyleValueForProperty(selection, 'font-size', '15px'),
+        parseInt($getSelectionStyleValueForProperty(selection, 'font-size', '15px').replace('px',''))
       );
       setFontColor(
         $getSelectionStyleValueForProperty(selection, 'color', '#000'),
@@ -182,7 +183,7 @@ const ToolbarPlugin = ({ configuration = {
         ),
       );
       setFontFamily(
-        $getSelectionStyleValueForProperty(selection, 'font-family', 'Arial'),
+        $getSelectionStyleValueForProperty(selection, 'font-family', defaultFont({ configuration }).value)
       );
     }
   }, [activeEditor]);
@@ -245,12 +246,12 @@ const ToolbarPlugin = ({ configuration = {
     );
   }, [activeEditor, isLink]);
 
-  const changeFont = (fontName) => {
+  const changeFont = (font) => {
     editor.update(() => {
       const selection = $getSelection();
       if ($isRangeSelection(selection)) {
         $patchStyleText(selection, {
-          "font-family": fontName,
+          "font-family": font.value,
         });
       }
     });
@@ -261,7 +262,7 @@ const ToolbarPlugin = ({ configuration = {
       const selection = $getSelection();
       if ($isRangeSelection(selection)) {
         $patchStyleText(selection, {
-          "font-size": fontSize,
+          "font-size": `${fontSize}px`,
         });
       }
     });
@@ -315,7 +316,14 @@ const ToolbarPlugin = ({ configuration = {
       { configuration.toolbar.showFontFormat &&   <>
       <Divider type="vertical" />
       <FontDropDown fonts={configuration.toolbar.fonts} value={fontFamily} onChange={changeFont} />
-      <FontSizeDropDown fontSizes={configuration.toolbar.fontSizes} value={fontSize} onChange={changeFontSize} />
+      <InputNumber
+            defaultValue={15}
+            value={fontSize}
+            min={9}
+            max={60}
+            step={1}
+            onChange={changeFontSize}
+        />
       </> }
       { configuration.toolbar.showAlignment && <><Divider type="vertical" /><AlignFormatDropDown editor={editor} disabled={!isEditable} locale={locale}/></> }
       { configuration.toolbar.showInsert && <><Divider type="vertical" /><InsertDropDown locale={locale} editor={editor} disabled={!isEditable} /></> }

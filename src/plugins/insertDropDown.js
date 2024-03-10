@@ -1,9 +1,9 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 
 import {INSERT_HORIZONTAL_RULE_COMMAND} from '@lexical/react/LexicalHorizontalRuleNode';
 
 // 3rd party
-import { Button, Dropdown, Space, Tooltip } from "antd";
+import { Button, Dropdown, Space } from "antd";
 // local import
 import Icons from "../icons";
 
@@ -34,7 +34,6 @@ function InsertDropDown({
       <Dropdown disabled={disabled} menu={{items}}>
         <Button type="text" size="large" icon={<Icons.Plus />}>
           <Space>
-            {locale.resources.insert}
             <Icons.Down />
           </Space>
         </Button>

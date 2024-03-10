@@ -13,6 +13,14 @@ const FONT_FAMILY_OPTIONS = [
   { value: "Verdana", label: "Verdana" },
 ];
 
+export const defaultFont = ({ configuration }) => {
+  var fonts = configuration.toolbar.fonts || FONT_FAMILY_OPTIONS;
+  return configuration.toolbar.defaultFont
+  ? fonts.find(x => x.value === configuration.toolbar.defaultFont) || fonts[0]
+  : fonts[0];
+}
+
+
 // --------------------------------------------------
 const FontDropDown = ({ fonts, value, onChange = () => {} }) => {
   const items = (fonts && fonts.length > 0 ? fonts :  FONT_FAMILY_OPTIONS)
@@ -24,7 +32,7 @@ const FontDropDown = ({ fonts, value, onChange = () => {} }) => {
     <Dropdown menu={{items}}>
       <Button type="text" size="large">
         <Space>
-          {value}
+          { (value && fonts.find(x => x.value === value)?.label) || fonts[0]?.label}
           <Icons.Down />
         </Space>
         </Button>

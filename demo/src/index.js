@@ -11,6 +11,22 @@ import punctuationCorrections from "./punctuationCorrections";
 import wordList from './wordList';
 import autoCorrection from './autoCorrection';
 
+const urduFonts = [
+  { value: 'AlviLahoriNastaleeq', label: 'Alvi Lahori Nastaleeq' },
+  { value: 'FajerNooriNastalique', label: 'Fajer Noori Nastalique' },
+  { value: 'gulzar-nastalique', label: 'Gulzar Nastalique' },
+  { value: 'EmadNastaleeq', label: 'Emad Nastaleeq' },
+  { value: 'NafeesWebNaskh', label: 'Nafees Web Naskh' },
+  { value: 'NafeesNastaleeq', label: 'Nafees Nastaleeq' },
+  { value: 'MehrNastaleeq', label: 'Mehr Nastaleeq' },
+  { value: 'AdobeArabic', label: 'Adobe Arabic' },
+  { value: 'Dubai', label: 'Dubai' },
+  { value: 'Noto Naskh Arabic', label: 'Noto Naskh Arabic' },
+  { value: 'Noto Nastaliq Urdu', label: 'Noto Nastaliq Urdu' },
+  { value: 'Jameel Noori Nastaleeq', label: 'Jameel Noori Nastaleeq' },
+  { value: 'jameel-khushkhati', label: 'Jameel Khushkhati' },
+  { value: 'JameelNooriNastaleeqKasheeda', label: 'Jameel Noori Nastaleeq Kasheeda' }
+];
 const Demo = () => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(undefined);
@@ -18,6 +34,8 @@ const Demo = () => {
     richText: true,
     language: "ur",
     toolbar: {
+      fonts: urduFonts,
+      defaultFont: 'MehrNastaleeq',
       showAlignment: true,
       showBlockFormat: true,
       showFontFormat: true,
@@ -34,7 +52,6 @@ const Demo = () => {
       autoCorrections: (lang) => autoCorrection[lang],
       wordList : (lang) => wordList[lang]
     },
-    onSave: (contents) => console.log(contents),
     format: "raw",
   });
   const locale = i18n[configuration.language];
@@ -46,16 +63,24 @@ const Demo = () => {
   };
 
   const setEditorValue = () => {
-    if (configuration.format === "markdown") {
-      setValue(`## حسن کوزہ گر
+    if (configuration.richText) {
+      if (configuration.format === "markdown") {
+        setValue(`## حسن کوزہ گر
 
-      جہاں زاد
-      `);
+        جہاں زاد
+        `);
+      }
+      else
+      {
+        setValue('{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"حسن کوزہ گر","type":"text","version":1}],"direction":"rtl","format":"","indent":0,"type":"heading","version":1,"tag":"h1"},{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"جہاں زاد","type":"text","version":1}],"direction":"rtl","format":"","indent":0,"type":"paragraph","version":1}],"direction":"rtl","format":"","indent":0,"type":"root","version":1}}');
+      }
+    } else {
+      setValue("حسن کوزہ گر");
     }
-    else
-    {
-      setValue('{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"حسن کوزہ گر","type":"text","version":1}],"direction":"rtl","format":"","indent":0,"type":"heading","version":1,"tag":"h1"},{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"جہاں زاد","type":"text","version":1}],"direction":"rtl","format":"","indent":0,"type":"paragraph","version":1}],"direction":"rtl","format":"","indent":0,"type":"root","version":1}}');
-    }
+  }
+
+  const changeLanguage = (value) => {
+    setConfiguration((e) => ({ ...e, language: value, toolbar: { ...e.toolbar, fonts: value == "ur" ? urduFonts : null }}))
   }
 
   return (
@@ -68,7 +93,8 @@ const Demo = () => {
         <Editor
           configuration={configuration}
           value={value}
-          onChange={(val) => console.log(val)}
+          onChange={(val) => console.log('OnChange: ', val)}
+          onSave={(contents) => console.log('OnSave: ', contents)}
         />
       </div>
       <FloatButton icon={<Icons.Setting />} onClick={showDrawer} />
@@ -91,7 +117,7 @@ const Demo = () => {
           <Select
             defaultValue={configuration.language}
             onChange={(value) =>
-              setConfiguration((e) => ({ ...e, language: value }))
+              setConfiguration(changeLanguage)
             }
             options={[
               {

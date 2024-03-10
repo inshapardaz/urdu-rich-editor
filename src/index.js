@@ -51,19 +51,28 @@ function Placeholder({ children }) {
 
 export default ({ value = null,
   onChange = () => {},
+  onSave = () => {},
   configuration = {
     richText : false,
+    format: "raw",
+    language : "en",
+    placeholder : null,
     toolbar : {
       fonts : null,
-      fontSizes: null,
+      defaultFont: null,
+      showAlignment: true,
+      showBlockFormat: true,
+      showFontFormat: true,
+      showInsert: true,
+      showListFormat: true,
+      showUndoRedo: true,
+      showExtraFormat: true,
+      showInsertLink: true,
+      showSave: false,
     },
-    onSave: () => {},
-    language : "en",
-    languageTools: false,
-    placeholder : null,
-    format: "raw",
     spellchecker : {
       enabled: false,
+      language: "en",
       punctuationCorrections: () => [],
       autoCorrections: () => [],
       wordList : () => [],
@@ -136,6 +145,7 @@ export default ({ value = null,
                   setIsLinkEditMode={setIsLinkEditMode}
                 />
                 <FloatingTextFormatToolbarPlugin
+                  configuration={configuration}
                   anchorElem={floatingAnchorElem}
                 />
               </>
@@ -148,8 +158,8 @@ export default ({ value = null,
           ErrorBoundary={LexicalErrorBoundary}
         /> }
         <HistoryPlugin />
-        <SavePlugin onSave={configuration.onSave} format={configuration.format }/>
-        <SpellCheckerPlugin locale={locale} language={configuration.language} configuration={configuration.spellchecker} />
+        <SavePlugin onSave={onSave} format={configuration.format}/>
+        <SpellCheckerPlugin locale={locale} language={configuration.spellchecker.language || configuration.language } configuration={configuration.spellchecker} />
         <ControlledValuePlugin
           value={value}
           onChange={onChange}

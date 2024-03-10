@@ -29,6 +29,7 @@ import CheckButton from '../../components/checkButton';
 function TextFormatFloatingToolbar({
   editor,
   anchorElem,
+  configuration,
   isLink,
   isBold,
   isItalic,
@@ -189,6 +190,7 @@ function TextFormatFloatingToolbar({
             aria-label="Format text to underlined"
             icon={<Icons.Underline />}
           />
+          { configuration.toolbar.showExtraFormat && <>
           <CheckButton
             type="text"
             onClick={() => {
@@ -218,7 +220,8 @@ function TextFormatFloatingToolbar({
             aria-label="Format Superscript"
             icon={<Icons.SuperScript />}
           />
-          <CheckButton
+          </>}
+          {/* <CheckButton
             type="text"
             onClick={() => {
               editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'code');
@@ -226,20 +229,22 @@ function TextFormatFloatingToolbar({
             checked={isCode}
             aria-label="Insert code block"
             icon={<Icons.Code />}
-          />
+          /> */}
+          { configuration.toolbar.showInsertLink && <>
           <CheckButton
             type="text"
             onClick={insertLink}
             checked={isLink}
             aria-label="Insert link"
             icon={<Icons.Link />} />
+          </> }
         </>
       )}
     </div>
   );
 }
 
-function useFloatingTextFormatToolbar(editor, anchorElem) {
+function useFloatingTextFormatToolbar(editor, anchorElem, configuration) {
   const [isText, setIsText] = useState(false);
   const [isLink, setIsLink] = useState(false);
   const [isBold, setIsBold] = useState(false);
@@ -338,6 +343,7 @@ function useFloatingTextFormatToolbar(editor, anchorElem) {
     <TextFormatFloatingToolbar
       editor={editor}
       anchorElem={anchorElem}
+      configuration={configuration}
       isLink={isLink}
       isBold={isBold}
       isItalic={isItalic}
@@ -353,7 +359,8 @@ function useFloatingTextFormatToolbar(editor, anchorElem) {
 
 export default function FloatingTextFormatToolbarPlugin({
   anchorElem = document.body,
+  configuration
 }) {
   const [editor] = useLexicalComposerContext();
-  return useFloatingTextFormatToolbar(editor, anchorElem);
+  return useFloatingTextFormatToolbar(editor, anchorElem, configuration);
 }

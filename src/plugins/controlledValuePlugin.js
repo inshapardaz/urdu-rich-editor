@@ -32,14 +32,20 @@ export const useAdoptPlaintextValue = (value, isRichText, format) => {
   useEffect(() => {
     if (value)
     {
-      editor.update(() => {
-        if (format === "markdown") {
-          $convertFromMarkdownString(value, TRANSFORMERS);
-        } else {
-          const editorState = editor.parseEditorState(value)
-          editor.setEditorState(editorState);
-        }
-      });
+      if (isRichText)
+      {
+        editor.update(() => {
+          if (format === "markdown") {
+            $convertFromMarkdownString(value, TRANSFORMERS);
+          } else {
+            const editorState = editor.parseEditorState(value)
+            editor.setEditorState(editorState);
+          }
+        });
+     }
+     else {
+        // TODO: implement plain text updates
+     }
     }
-  }, [value, editor]);
+  }, [editor, value]);
 };

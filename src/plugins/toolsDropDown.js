@@ -22,17 +22,18 @@ function ToolsDropDown({
         onClick: () => editor.dispatchCommand(AUTO_CORRECT_COMMAND),
         label: locale.resources.autoCorrect,
         icon: <Icons.AutoCorrect />,
-      }, {
-        onClick: () => editor.dispatchCommand(SPELLCHECK_COMMAND),
-        label: locale.resources.spellchecker,
-        icon: <Icons.SpellChecker />,
-      } ]
+      }
+      // , {
+      //   onClick: () => editor.dispatchCommand(SPELLCHECK_COMMAND),
+      //   label: locale.resources.spellchecker,
+      //   icon: <Icons.SpellChecker />,
+      // }
+    ]
 
     return (
       <Dropdown disabled={disabled} menu={{items}}>
         <Button type="text" size="large" icon={<Icons.Tools />}>
           <Space>
-            {locale.resources.tools}
             <Icons.Down />
           </Space>
         </Button>
