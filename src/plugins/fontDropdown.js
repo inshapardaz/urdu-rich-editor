@@ -25,7 +25,7 @@ export const defaultFont = ({ configuration }) => {
 const FontDropDown = ({ fonts, value, onChange = () => {} }) => {
   const configuredFonts = (fonts && fonts.length > 0 ? fonts :  FONT_FAMILY_OPTIONS);
   const selected = () => value && configuredFonts.find(x => x.value === value) || configuredFonts[0];
-  onFontSelect = (item) => {
+  const onFontSelect = (item) => {
     onChange(item.key);
   }
   const items = configuredFonts
