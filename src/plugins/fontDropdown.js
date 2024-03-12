@@ -14,9 +14,9 @@ const FONT_FAMILY_OPTIONS = [
 ];
 
 export const defaultFont = ({ configuration }) => {
-  var fonts = configuration.toolbar.fonts || FONT_FAMILY_OPTIONS;
-  return configuration.toolbar.defaultFont
-  ? fonts.find(x => x.value === configuration.toolbar.defaultFont) || fonts[0]
+  var fonts = configuration?.toolbar?.fonts || FONT_FAMILY_OPTIONS;
+  return configuration?.toolbar?.defaultFont
+  ? fonts.find(x => x.value === configuration?.toolbar?.defaultFont) || fonts[0]
   : fonts[0];
 }
 

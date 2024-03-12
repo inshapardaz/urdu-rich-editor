@@ -88,7 +88,7 @@ const ToolbarPlugin = ({ configuration, setIsLinkEditMode, locale }) => {
       const selection = $getSelection();
       if (selection) {
         $patchStyleText(selection, {
-          'font-family': defaultFont(configuration.toolbar.fonts),
+          'font-family': defaultFont(configuration?.toolbar?.fonts),
         });
       }
     });

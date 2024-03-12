@@ -158,7 +158,7 @@ export default ({ value = null,
           ErrorBoundary={LexicalErrorBoundary}
         /> }
         <HistoryPlugin />
-        <SavePlugin onSave={onSave} format={configuration.format}/>
+        <SavePlugin onSave={(c) => onSave(c)} format={configuration.format}/>
         <SpellCheckerPlugin locale={locale} language={configuration.spellchecker.language || configuration.language } configuration={configuration.spellchecker} />
         <ControlledValuePlugin
           value={value}
