@@ -29,7 +29,7 @@ const urduFonts = [
 ];
 const Demo = () => {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(undefined);
+  const [value, setValue] = useState(null);
   const [configuration, setConfiguration] = useState({
     richText: true,
     language: "ur",

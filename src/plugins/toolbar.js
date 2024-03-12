@@ -251,9 +251,9 @@ const ToolbarPlugin = ({ configuration, setIsLinkEditMode, locale }) => {
       const selection = $getSelection();
       if ($isRangeSelection(selection)) {
         $patchStyleText(selection, {
-          "font-family": font.value,
+          "font-family": font,
         });
-      }
+              }
     });
   };
 

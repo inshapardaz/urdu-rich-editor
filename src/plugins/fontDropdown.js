@@ -24,16 +24,26 @@ export const defaultFont = ({ configuration }) => {
 // --------------------------------------------------
 const FontDropDown = ({ fonts, value, onChange = () => {} }) => {
   const configuredFonts = (fonts && fonts.length > 0 ? fonts :  FONT_FAMILY_OPTIONS);
+  const selected = () => value && configuredFonts.find(x => x.value === value) || configuredFonts[0];
+  onFontSelect = (item) => {
+    onChange(item.key);
+  }
   const items = configuredFonts
   .map(i => ({
-    onClick: () => onChange(i.value),
+    key: i.value,
     label: i.label,
   }));
+
   return (
-    <Dropdown menu={{items}}>
+    <Dropdown menu={{
+      items,
+      selectedKeys : [ selected() ],
+      onClick: onFontSelect,
+    }}
+      onClick={onFontSelect}>
       <Button type="text" size="large">
         <Space>
-          { (value && configuredFonts.find(x => x.value === value)?.label) || configuredFonts[0]?.label}
+          { selected().label }
           <Icons.Down />
         </Space>
         </Button>
