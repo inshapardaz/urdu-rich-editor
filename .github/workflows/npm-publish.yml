@@ -3,6 +3,10 @@ name: Node.js Package
 on:
   push:
     branches: [ "main" ]
+    paths-ignore:
+      - '**/*.md'
+      - '.gitignore'
+      - '.editorconfig'
 
 jobs:
   build-and-publish:

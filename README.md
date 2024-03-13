@@ -19,7 +19,10 @@ import Editor from 'urdu-web-editor'
 
 class Example extends Component {
   render() {
-    return <Editor value={theValue} onChange={changeCallback} onSave={saveCallback} configuration={uiConfiguration} />
+    return <Editor value={theValue}
+        onChange={changeCallback}
+        onSave={saveCallback}
+        configuration={uiConfiguration} />
   }
 }
 ```
@@ -47,31 +50,31 @@ This callback function is called when save button is clicked on the editor. This
 
 Configuration object to customize the functionality and ui of the editor. Its structure is as follows:
 
-```json
+```js
   {
-    richText : false,
-    format: "raw",
-    language : "en",
-    placeholder : null,
-    toolbar : {
-      fonts : null,
-      defaultFont: null,
-      showAlignment: true,
-      showBlockFormat: true,
-      showFontFormat: true,
-      showInsert: true,
-      showListFormat: true,
-      showUndoRedo: true,
-      showExtraFormat: true,
-      showInsertLink: true,
-      showSave: false,
+    "richText" : false,
+    "format": "raw",
+    "language" : "en",
+    "placeholder" : null,
+    "toolbar" : {
+      "fonts" : null,
+      "defaultFont": null,
+      "showAlignment": true,
+      "showBlockFormat": true,
+      "showFontFormat": true,
+      "showInsert": true,
+      "showListFormat": true,
+      "showUndoRedo": true,
+      "showExtraFormat": true,
+      "showInsertLink": true,
+      "showSave": false,
     },
-    spellchecker : {
-      enabled: false,
-      language : "en",
-      punctuationCorrections: () => [],
-      autoCorrections: () => [],
-      wordList : () => [],
+    "spellchecker" : {
+      "enabled": false,
+      "language" : "en",
+      "punctuationCorrections": () => [],
+      "autoCorrections": () => [],
+      "wordList" : () => [],
     }
   }
 ```
@@ -117,18 +120,20 @@ Text to use when there is no value present. By default a generic message will be
 Type : object
 
 Default value :
-```json
-  fonts : null,
-  defaultFont: null,
-  showAlignment: true,
-  showBlockFormat: true,
-  showFontFormat: true,
-  showInsert: true,
-  showListFormat: true,
-  showUndoRedo: true,
-  showExtraFormat: true,
-  showInsertLink: true,
-  showSave: false,
+```js
+{
+  "fonts" : null,
+  "defaultFont": null,
+  "showAlignment": true,
+  "showBlockFormat": true,
+  "showFontFormat": true,
+  "showInsert": true,
+  "showListFormat": true,
+  "showUndoRedo": true,
+  "showExtraFormat": true,
+  "showInsertLink": true,
+  "showSave": false,
+}
 ```
 
 | Property | type | Default Value | Description |
@@ -148,12 +153,12 @@ Default value :
 ##### Default font list and value of font-face
 ```json
 [
-  { value: "Arial", label: "Arial" },
-  { value: "Courier New", label: "Courier New" },
-  { value: "Georgia", label: "Georgia" },
-  { value: "Times New Roman", label: "Times New Roman" },
-  { value: "Trebuchet MS", label: "Trebuchet MS" },
-  { value: "Verdana", label: "Verdana" },
+  { "value": "Arial", "label": "Arial" },
+  { "value": "Courier New", "label": "Courier New" },
+  { "value": "Georgia", "label": "Georgia" },
+  { "value": "Times New Roman", "label": "Times New Roman" },
+  { "value": "Trebuchet MS", "label": "Trebuchet MS" },
+  { "value": "Verdana", "label": "Verdana" },
 ];
 ```
 
@@ -162,12 +167,14 @@ Default value :
 Type : object
 
 Default value :
-```json
-  enabled: false,
-  language : "en",
-  punctuationCorrections: (lang) => [],
-  autoCorrections: (lang) => [],
-  wordList : (lang) => [],
+```js
+{
+  "enabled": false,
+  "language : "en",
+  "punctuationCorrections": (lang) => [],
+  "autoCorrections": (lang) => [],
+  "wordList" : (lang) => [],
+}
 ```
 
 | Property | type | Default Value | Description |
@@ -183,9 +190,9 @@ Default value :
 
 ```json
 [{
-  incorrectText: "",
-  correctText: "",
-  completeWord: true
+  "incorrectText": "",
+  "correctText": "",
+  "completeWord": true
 }]
 ```
 
