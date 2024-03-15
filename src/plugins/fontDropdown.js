@@ -13,7 +13,7 @@ const FONT_FAMILY_OPTIONS = [
   { value: "Verdana", label: "Verdana" },
 ];
 
-export const defaultFont = ({ configuration }) => {
+export const defaultFont = (configuration) => {
   var fonts = configuration?.toolbar?.fonts || FONT_FAMILY_OPTIONS;
   return configuration?.toolbar?.defaultFont
   ? fonts.find(x => x.value === configuration?.toolbar?.defaultFont) || fonts[0]
