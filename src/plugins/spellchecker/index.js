@@ -74,7 +74,7 @@ export default function SpellCheckerPlugin({ locale, language, configuration = {
     }
 
     const autoCorrect = () => {
-      var corrections = configuration.autoCorrections(language);
+      var corrections = configuration.autoCorrections ? configuration.autoCorrections(language) : [];
       editor.update(() => {
         var root = $getRoot(editor);
         var children = root.getChildren();
@@ -112,7 +112,7 @@ export default function SpellCheckerPlugin({ locale, language, configuration = {
   }
 
   const punctuationCorrection = () => {
-    var corrections = configuration.punctuationCorrections(language);
+    var corrections = configuration.punctuationCorrections ? configuration.punctuationCorrections(language) : [];
     editor.update(() => {
       var root = $getRoot(editor);
       var children = root.getChildren();

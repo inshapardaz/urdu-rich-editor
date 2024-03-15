@@ -13,15 +13,49 @@ npm install --save urdu-web-editor
 ## Usage
 
 ```jsx
-import React, { Component } from 'react'
+import React, { useState, useCallback, Component } from 'react'
 
 import Editor from 'urdu-web-editor'
 
 class Example extends Component {
+  const [value, setValue] = useState(null);
+  const onSave = useCallback((newContents) => {
+    console.log('onSave:', newContents)
+  });
+
+  const onChange = useCallback((newContents) => {
+    console.log('onChange:', newContents)
+  });
+
+  const uiConfiguration = {
+    "richText" : true,
+    "format": "raw",
+    "language" : "en",
+    "placeholder" : null,
+    "toolbar" : {
+      "showAlignment": true,
+      "showBlockFormat": true,
+      "showFontFormat": true,
+      "showInsert": true,
+      "showListFormat": true,
+      "showUndoRedo": true,
+      "showExtraFormat": true,
+      "showInsertLink": true,
+      "showSave": true,
+    },
+    "spellchecker" : {
+      "enabled": false,
+      "language" : "en",
+      "punctuationCorrections": () => [],
+      "autoCorrections": () => [],
+      "wordList" : () => [],
+    }
+  };
+
   render() {
-    return <Editor value={theValue}
-        onChange={changeCallback}
-        onSave={saveCallback}
+    return <Editor value={value}
+        onChange={onChange}
+        onSave={onSave}
         configuration={uiConfiguration} />
   }
 }

@@ -50,8 +50,8 @@ function Placeholder({ children }) {
 // ------------------------------------------------------
 
 export default ({ value = null,
-  onChange = () => {},
-  onSave = () => {},
+  onChange,
+  onSave,
   configuration = {
     richText : false,
     format: "raw",
@@ -73,9 +73,9 @@ export default ({ value = null,
     spellchecker : {
       enabled: false,
       language: "en",
-      punctuationCorrections: () => [],
-      autoCorrections: () => [],
-      wordList : () => [],
+      punctuationCorrections: null,
+      autoCorrections: null,
+      wordList: null,
     }
   }
 }) => {
@@ -158,7 +158,7 @@ export default ({ value = null,
           ErrorBoundary={LexicalErrorBoundary}
         /> }
         <HistoryPlugin />
-        <SavePlugin onSave={(c) => onSave(c)} format={configuration.format}/>
+        <SavePlugin onSave={onSave} format={configuration.format}/>
         <SpellCheckerPlugin locale={locale} language={configuration.spellchecker.language || configuration.language } configuration={configuration.spellchecker} />
         <ControlledValuePlugin
           value={value}

@@ -13,12 +13,16 @@ export const ControlledValuePlugin = ({ value, onChange, isRichtext, format }) =
       if (format === "markdown") {
         editor.update(() => {
           const markdown = $convertToMarkdownString(TRANSFORMERS);
-          onChange(markdown);
+          if (onChange) {
+            onChange(markdown);
+          }
         });
       } else {
         const editorState = editor.getEditorState();
         const json = editorState.toJSON();
-        onChange(json);
+        if (onChange) {
+          onChange(json);
+        }
       }
     });
   };

@@ -8,19 +8,23 @@ import {
 // ------------------------------------------------------
 import { SAVE_COMMAND } from '../commands/saveCommand';
 // ------------------------------------------------------
-function SavePlugin({ format, onSave = () => {} }) {
+function SavePlugin({ format, onSave }) {
   const [editor] = useLexicalComposerContext();
 
   const saveCallback = useCallback(() => {
     if (format === "markdown") {
       editor.update(() => {
         const markdown = $convertToMarkdownString(TRANSFORMERS);
-        onSave(markdown);
+        if (onSave) { 
+          onSave(markdown);
+        }
       });
     } else {
       const editorState = editor.getEditorState();
       const json = editorState.toJSON();
-      onSave(json);
+      if (onSave) {
+        onSave(json);
+      }
     }
   }, [editor, format, onSave]);
 
