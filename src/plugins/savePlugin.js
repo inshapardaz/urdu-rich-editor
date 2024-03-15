@@ -11,7 +11,7 @@ import { SAVE_COMMAND } from '../commands/saveCommand';
 function SavePlugin({ format, onSave }) {
   const [editor] = useLexicalComposerContext();
 
-  const saveCallback = useCallback(() => {
+  const saveCallback = () => {
     if (format === "markdown") {
       editor.update(() => {
         const markdown = $convertToMarkdownString(TRANSFORMERS);
@@ -26,7 +26,7 @@ function SavePlugin({ format, onSave }) {
         onSave(json);
       }
     }
-  }, [editor, format, onSave]);
+  };
 
   useEffect(() => {
     editor.registerCommand(
