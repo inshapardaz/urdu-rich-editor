@@ -1,6 +1,6 @@
 # urdu-web-editor
 
-> Urdu Rich Text Editor for web based on lexical
+Urdu Rich Text Editor for web based on [lexical](https://lexical.dev/)
 
 [![NPM](https://img.shields.io/npm/v/urdu-web-editor.svg)](https://www.npmjs.com/package/urdu-web-editor) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
@@ -193,7 +193,7 @@ Default value :
   { "value": "Times New Roman", "label": "Times New Roman" },
   { "value": "Trebuchet MS", "label": "Trebuchet MS" },
   { "value": "Verdana", "label": "Verdana" },
-];
+]
 ```
 
 #### spellchecker

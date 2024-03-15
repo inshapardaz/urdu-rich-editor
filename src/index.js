@@ -85,7 +85,7 @@ export default ({ value = null,
   const editorState = value === EMPTY_CONTENT ? configuration.format == 'markdown'? ' ' : EMPTY_CONTENT : value;
   const initialConfig = {
     namespace: "MyEditor",
-    editorState: editorState,
+    editorState: () => configuration.format === 'markdown' ? $convertFromMarkdownString(editorState, TRANSFORMERS) : editorState,
     nodes: [...EditorNodes],
     theme: EditorTheme,
     onError,
