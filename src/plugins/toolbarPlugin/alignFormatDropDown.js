@@ -9,7 +9,7 @@ import {
 import { Button, Dropdown, Space } from "antd";
 
 // Local imports
-import Icons from '../icons'
+import Icons from '../../icons'
 // ----------------------------------------------------------------
 function AlignFormatDropDown({ editor, disabled = false, locale }) {
   const items = [{
@@ -44,7 +44,6 @@ function AlignFormatDropDown({ editor, disabled = false, locale }) {
     <Dropdown disabled={disabled} menu={{items}}>
       <Button type="text" size="large" icon={<Icons.AlignLeft />}>
         <Space>
-        {locale.resources.align}
           <Icons.Down />
         </Space>
         </Button>

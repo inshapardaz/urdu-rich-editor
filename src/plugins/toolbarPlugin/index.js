@@ -43,17 +43,17 @@ import { useCallback, useEffect, useState } from "react";
 import { Button, Divider, InputNumber, Tooltip } from "antd";
 // -----------------------------------------------------------
 
-import { sanitizeUrl } from '../utils/url';
-import { getSelectedNode } from '../utils/getSelectedNode';
+import { sanitizeUrl } from '../../utils/url';
+import { getSelectedNode } from '../../utils/getSelectedNode';
 import FontDropDown, { defaultFont } from "./fontDropdown";
 import BlockFormatDropDown, { blockTypeToBlockName } from './blockFormatDropDown';
 import InsertDropDown from "./insertDropDown";
 import ToolsDropdown from "./toolsDropDown";
-import Icons from '../icons'
-import CheckButton from "../components/checkButton";
+import Icons from '../../icons'
+import CheckButton from "../../components/checkButton";
 import AlignFormatDropDown from "./alignFormatDropDown";
-import styles from "../styles.module.css";
-import { SAVE_COMMAND } from '../commands/saveCommand';
+import styles from "../../styles.module.css";
+import { SAVE_COMMAND } from '../../commands/saveCommand';
 // -----------------------------------------------------------
 
 const ToolbarPlugin = ({ configuration, setIsLinkEditMode, locale }) => {

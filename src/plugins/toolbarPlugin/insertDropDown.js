@@ -5,7 +5,7 @@ import {INSERT_HORIZONTAL_RULE_COMMAND} from '@lexical/react/LexicalHorizontalRu
 // 3rd party
 import { Button, Dropdown, Space } from "antd";
 // local import
-import Icons from "../icons";
+import Icons from "../../icons";
 
 // --------------------------------------
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Dropdown, Select, Space } from "antd";
-import Icons from '../icons';
+import Icons from '../../icons';
 
 // --------------------------------------------------
 

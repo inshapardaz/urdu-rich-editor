@@ -18,7 +18,7 @@ import { $createHeadingNode,  $createQuoteNode } from '@lexical/rich-text';
 import { Button, Dropdown, Space } from "antd";
 
 // Local imports
-import Icons from '../icons'
+import Icons from '../../icons'
 
 // ----------------------------------------------------------------
 
@@ -180,11 +180,8 @@ function BlockFormatDropDown({
       items,
     }}>
       <Button type="text" size="large" icon={selectedItem?.icon ?? <Icons.Paragraph />}>
-        <Space>
-          {selectedItem?.label ?? locale.resources.normal}
           <Icons.Down />
-        </Space>
-        </Button>
+      </Button>
     </Dropdown>
     </>
   );

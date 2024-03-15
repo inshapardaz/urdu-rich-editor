@@ -1,11 +1,11 @@
 import React, { Fragment } from 'react';
 
-import { AUTO_CORRECT_COMMAND, SPELLCHECK_COMMAND, PUNCTUATION_CORRECT_COMMAND } from '../commands/spellCheckCommand';
+import { AUTO_CORRECT_COMMAND, SPELLCHECK_COMMAND, PUNCTUATION_CORRECT_COMMAND } from '../../commands/spellCheckCommand';
 
 // 3rd party
 import { Button, Dropdown, Space, Tooltip } from "antd";
 // local import
-import Icons from "../icons";
+import Icons from "../../icons";
 
 // --------------------------------------
 

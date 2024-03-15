@@ -10,13 +10,14 @@ import { ListPlugin } from '@lexical/react/LexicalListPlugin';
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
 import {
+  $convertFromMarkdownString,
   TRANSFORMERS,
 } from '@lexical/markdown';
 import { MarkdownShortcutPlugin } from '@lexical/react/LexicalMarkdownShortcutPlugin';
 import {CAN_USE_DOM} from './utils/canUseDOM';
 
 // ------------------------------------------------------
-import ToolbarPlugin from "./plugins/toolbar";
+import ToolbarPlugin from "./plugins/toolbarPlugin";
 import AutoLinkPlugin from './plugins/autoLink.Plugin';
 import { HorizontalRulePlugin } from './plugins/horizontalRulePlugin';
 import LinkPlugin from './plugins/link.Plugin';
