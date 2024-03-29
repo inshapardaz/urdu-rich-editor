@@ -1,8 +1,8 @@
-import './index.css';
+import "./index.css";
 
-import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
-import {eventFiles} from '@lexical/rich-text';
-import {mergeRegister} from '@lexical/utils';
+import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import { eventFiles } from "@lexical/rich-text";
+import { mergeRegister } from "@lexical/utils";
 import {
   $getNearestNodeFromDOMNode,
   $getNodeByKey,
@@ -11,20 +11,20 @@ import {
   COMMAND_PRIORITY_LOW,
   DRAGOVER_COMMAND,
   DROP_COMMAND,
-} from 'lexical';
-import * as React from 'react';
-import {useEffect, useRef, useState} from 'react';
-import {createPortal} from 'react-dom';
+} from "lexical";
+import * as React from "react";
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
-import {isHTMLElement} from '../../utils/guard';
-import {Point} from '../../utils/point';
-import {Rect} from '../../utils/rect';
-import Icons from '../../icons';
+import { isHTMLElement } from "../../utils/guard";
+import { Point } from "../../utils/point";
+import { Rect } from "../../utils/rect";
+import Icons from "../../icons";
 
 const SPACE = 4;
 const TARGET_LINE_HALF_HEIGHT = 2;
-const DRAGGABLE_BLOCK_MENU_CLASSNAME = 'draggable-block-menu';
-const DRAG_DATA_FORMAT = 'application/x-lexical-drag-block';
+const DRAGGABLE_BLOCK_MENU_CLASSNAME = "draggable-block-menu";
+const DRAG_DATA_FORMAT = "application/x-lexical-drag-block";
 const TEXT_BOX_HORIZONTAL_PADDING = 28;
 
 const Downward = 1;
@@ -49,36 +49,31 @@ function getTopLevelNodeKeys(editor) {
 }
 
 function getCollapsedMargins(elem) {
-  const getMargin = ( element, margin) =>
+  const getMargin = (element, margin) =>
     element ? parseFloat(window.getComputedStyle(element)[margin]) : 0;
 
-  const {marginTop, marginBottom} = window.getComputedStyle(elem);
+  const { marginTop, marginBottom } = window.getComputedStyle(elem);
   const prevElemSiblingMarginBottom = getMargin(
     elem.previousElementSibling,
-    'marginBottom',
+    "marginBottom"
   );
   const nextElemSiblingMarginTop = getMargin(
     elem.nextElementSibling,
-    'marginTop',
+    "marginTop"
   );
   const collapsedTopMargin = Math.max(
     parseFloat(marginTop),
-    prevElemSiblingMarginBottom,
+    prevElemSiblingMarginBottom
   );
   const collapsedBottomMargin = Math.max(
     parseFloat(marginBottom),
-    nextElemSiblingMarginTop,
+    nextElemSiblingMarginTop
   );
 
-  return {marginBottom: collapsedBottomMargin, marginTop: collapsedTopMargin};
+  return { marginBottom: collapsedBottomMargin, marginTop: collapsedTopMargin };
 }
 
-function getBlockElement(
-  anchorElem,
-  editor,
-  event,
-  useEdgeAsDefault = false,
-) {
+function getBlockElement(anchorElem, editor, event, useEdgeAsDefault = false) {
   const anchorElementRect = anchorElem.getBoundingClientRect();
   const topLevelNodeKeys = getTopLevelNodeKeys(editor);
 
@@ -120,7 +115,7 @@ function getBlockElement(
       }
       const point = new Point(event.x, event.y);
       const domRect = Rect.fromDOM(elem);
-      const {marginTop, marginBottom} = getCollapsedMargins(elem);
+      const { marginTop, marginBottom } = getCollapsedMargins(elem);
 
       const rect = domRect.generateNewRect({
         bottom: domRect.bottom + marginBottom,
@@ -131,7 +126,7 @@ function getBlockElement(
 
       const {
         result,
-        reason: {isOnTopSide, isOnBottomSide},
+        reason: { isOnTopSide, isOnBottomSide },
       } = rect.contains(point);
 
       if (result) {
@@ -162,14 +157,14 @@ function isOnMenu(element) {
   return !!element.closest(`.${DRAGGABLE_BLOCK_MENU_CLASSNAME}`);
 }
 
-function setMenuPosition(
-  targetElem,
-  floatingElem,
-  anchorElem,
-) {
+function setMenuPosition(targetElem, floatingElem, anchorElem, isRtl) {
   if (!targetElem) {
-    floatingElem.style.opacity = '0';
-    floatingElem.style.transform = 'translate(-10000px, -10000px)';
+    floatingElem.style.opacity = "0";
+    if (isRtl) {
+      floatingElem.style.transform = "translate(10000px, -10000px)";
+    } else {
+      floatingElem.style.transform = "translate(-10000px, -10000px)";
+    }
     return;
   }
 
@@ -185,15 +180,15 @@ function setMenuPosition(
 
   const left = SPACE;
 
-  floatingElem.style.opacity = '1';
+  floatingElem.style.opacity = "1";
   floatingElem.style.transform = `translate(${left}px, ${top}px)`;
 }
 
 function setDragImage(dataTransfer, draggableBlockElem) {
-  const {transform} = draggableBlockElem.style;
+  const { transform } = draggableBlockElem.style;
 
   // Remove dragImage borders
-  draggableBlockElem.style.transform = 'translateZ(0)';
+  draggableBlockElem.style.transform = "translateZ(0)";
   dataTransfer.setDragImage(draggableBlockElem, 0, 0);
 
   setTimeout(() => {
@@ -201,13 +196,13 @@ function setDragImage(dataTransfer, draggableBlockElem) {
   });
 }
 
-function setTargetLine( targetLineElem, targetBlockElem, mouseY, anchorElem ) {
-  const {top: targetBlockElemTop, height: targetBlockElemHeight} =
+function setTargetLine(targetLineElem, targetBlockElem, mouseY, anchorElem) {
+  const { top: targetBlockElemTop, height: targetBlockElemHeight } =
     targetBlockElem.getBoundingClientRect();
-  const {top: anchorTop, width: anchorWidth} =
+  const { top: anchorTop, width: anchorWidth } =
     anchorElem.getBoundingClientRect();
 
-  const {marginTop, marginBottom} = getCollapsedMargins(targetBlockElem);
+  const { marginTop, marginBottom } = getCollapsedMargins(targetBlockElem);
   let lineTop = targetBlockElemTop;
   if (mouseY >= targetBlockElemTop) {
     lineTop += targetBlockElemHeight + marginBottom / 2;
@@ -222,17 +217,21 @@ function setTargetLine( targetLineElem, targetBlockElem, mouseY, anchorElem ) {
   targetLineElem.style.width = `${
     anchorWidth - (TEXT_BOX_HORIZONTAL_PADDING - SPACE) * 2
   }px`;
-  targetLineElem.style.opacity = '.4';
+  targetLineElem.style.opacity = ".4";
 }
 
-function hideTargetLine(targetLineElem) {
+function hideTargetLine(targetLineElem, isRtl) {
   if (targetLineElem) {
-    targetLineElem.style.opacity = '0';
-    targetLineElem.style.transform = 'translate(-10000px, -10000px)';
+    targetLineElem.style.opacity = "0";
+    if (isRtl) {
+      targetLineElem.style.transform = "translate(10000px, -10000px)";
+    } else {
+      targetLineElem.style.transform = "translate(-10000px, -10000px)";
+    }
   }
 }
 
-function useDraggableBlockMenu(editor, anchorElem, isEditable) {
+function useDraggableBlockMenu(editor, anchorElem, isEditable, isRtl) {
   const scrollerElem = anchorElem.parentElement;
 
   const menuRef = useRef(null);
@@ -261,18 +260,18 @@ function useDraggableBlockMenu(editor, anchorElem, isEditable) {
       setDraggableBlockElem(null);
     }
 
-    scrollerElem?.addEventListener('mousemove', onMouseMove);
-    scrollerElem?.addEventListener('mouseleave', onMouseLeave);
+    scrollerElem?.addEventListener("mousemove", onMouseMove);
+    scrollerElem?.addEventListener("mouseleave", onMouseLeave);
 
     return () => {
-      scrollerElem?.removeEventListener('mousemove', onMouseMove);
-      scrollerElem?.removeEventListener('mouseleave', onMouseLeave);
+      scrollerElem?.removeEventListener("mousemove", onMouseMove);
+      scrollerElem?.removeEventListener("mouseleave", onMouseLeave);
     };
   }, [scrollerElem, anchorElem, editor]);
 
   useEffect(() => {
     if (menuRef.current) {
-      setMenuPosition(draggableBlockElem, menuRef.current, anchorElem);
+      setMenuPosition(draggableBlockElem, menuRef.current, anchorElem, isRtl);
     }
   }, [anchorElem, draggableBlockElem]);
 
@@ -285,7 +284,7 @@ function useDraggableBlockMenu(editor, anchorElem, isEditable) {
       if (isFileTransfer) {
         return false;
       }
-      const {pageY, target} = event;
+      const { pageY, target } = event;
       if (!isHTMLElement(target)) {
         return false;
       }
@@ -308,8 +307,8 @@ function useDraggableBlockMenu(editor, anchorElem, isEditable) {
       if (isFileTransfer) {
         return false;
       }
-      const {target, dataTransfer, pageY} = event;
-      const dragData = dataTransfer?.getData(DRAG_DATA_FORMAT) || '';
+      const { target, dataTransfer, pageY } = event;
+      const dragData = dataTransfer?.getData(DRAG_DATA_FORMAT) || "";
       const draggedNode = $getNodeByKey(dragData);
       if (!draggedNode) {
         return false;
@@ -345,15 +344,15 @@ function useDraggableBlockMenu(editor, anchorElem, isEditable) {
         (event) => {
           return onDragover(event);
         },
-        COMMAND_PRIORITY_LOW,
+        COMMAND_PRIORITY_LOW
       ),
       editor.registerCommand(
         DROP_COMMAND,
         (event) => {
           return onDrop(event);
         },
-        COMMAND_PRIORITY_HIGH,
-      ),
+        COMMAND_PRIORITY_HIGH
+      )
     );
   }, [anchorElem, editor]);
 
@@ -363,7 +362,7 @@ function useDraggableBlockMenu(editor, anchorElem, isEditable) {
       return;
     }
     setDragImage(dataTransfer, draggableBlockElem);
-    let nodeKey = '';
+    let nodeKey = "";
     editor.update(() => {
       const node = $getNearestNodeFromDOMNode(draggableBlockElem);
       if (node) {
@@ -376,7 +375,7 @@ function useDraggableBlockMenu(editor, anchorElem, isEditable) {
 
   function onDragEnd() {
     isDraggingBlockRef.current = false;
-    hideTargetLine(targetLineRef.current);
+    hideTargetLine(targetLineRef.current, isRtl);
   }
 
   return createPortal(
@@ -386,20 +385,20 @@ function useDraggableBlockMenu(editor, anchorElem, isEditable) {
         ref={menuRef}
         draggable={true}
         onDragStart={onDragStart}
-        onDragEnd={onDragEnd}>
-        <div className={isEditable ? 'icon' : ''} >
-        <Icons.KebabMenu />
-        </div>
+        onDragEnd={onDragEnd}
+      >
+        <div className={isEditable ? "icon" : ""} />
       </div>
       <div className="draggable-block-target-line" ref={targetLineRef} />
     </>,
-    anchorElem,
+    anchorElem
   );
 }
 
 export default function DraggableBlockPlugin({
   anchorElem = document.body,
+  isRtl,
 }) {
   const [editor] = useLexicalComposerContext();
-  return useDraggableBlockMenu(editor, anchorElem, editor._editable);
+  return useDraggableBlockMenu(editor, anchorElem, editor._editable, isRtl);
 }

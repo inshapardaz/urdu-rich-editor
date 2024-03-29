@@ -1,21 +1,19 @@
-import {useEffect, useCallback} from 'react';
+import { useEffect, useCallback } from "react";
 // ------------------------------------------------------
-import { $convertToMarkdownString, TRANSFORMERS } from '@lexical/markdown';
-import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
-import {
-  COMMAND_PRIORITY_LOW,
-} from 'lexical';
+import { $convertToMarkdownString, TRANSFORMERS } from "@lexical/markdown";
+import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import { COMMAND_PRIORITY_LOW } from "lexical";
 // ------------------------------------------------------
-import { SAVE_COMMAND } from '../commands/saveCommand';
+import { SAVE_COMMAND } from "../commands/saveCommand";
 // ------------------------------------------------------
 function SavePlugin({ format, onSave }) {
   const [editor] = useLexicalComposerContext();
 
-  const saveCallback = () => {
+  const saveCallback = useCallback(() => {
     if (format === "markdown") {
       editor.update(() => {
         const markdown = $convertToMarkdownString(TRANSFORMERS);
-        if (onSave) { 
+        if (onSave) {
           onSave(markdown);
         }
       });
@@ -26,16 +24,14 @@ function SavePlugin({ format, onSave }) {
         onSave(json);
       }
     }
-  };
+  }, [format, onSave]);
 
   useEffect(() => {
-    editor.registerCommand(
-      SAVE_COMMAND,
-      saveCallback,
-      COMMAND_PRIORITY_LOW,
-    );
-
-  }, [editor]);
+    if (editor._commands.has(SAVE_COMMAND)) {
+      editor._commands.delete(SAVE_COMMAND);
+    }
+    editor.registerCommand(SAVE_COMMAND, saveCallback, COMMAND_PRIORITY_LOW);
+  }, [editor, format, saveCallback]);
 
   return null;
 }

@@ -24,20 +24,21 @@ code {
 }
 
 .editorPlaceholder {
+  font-size: 15px;
   color: #999;
   overflow: hidden;
   position: absolute;
   text-overflow: ellipsis;
-  top: 64px;
-  left: 18px;
-  font-size: 15px;
+  top: 8px;
+  left: 28px;
+  right: 28px;
   user-select: none;
+  white-space: nowrap;
   display: inline-block;
   pointer-events: none;
 }
 
 .rtl .editorPlaceholder {
-  right: 18px;
   left: auto;
 }
 

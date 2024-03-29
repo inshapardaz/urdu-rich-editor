@@ -7,12 +7,17 @@ export function setFloatingElemPositionForLinkEditor(
   anchorElem,
   verticalGap = VERTICAL_GAP,
   horizontalOffset = HORIZONTAL_OFFSET,
+  isRtl
 ) {
   const scrollerElem = anchorElem.parentElement;
 
   if (targetRect === null || !scrollerElem) {
-    floatingElem.style.opacity = '0';
-    floatingElem.style.transform = 'translate(-10000px, -10000px)';
+    floatingElem.style.opacity = "0";
+    if (isRtl) {
+      floatingElem.style.transform = "translate(10000px, -10000px)";
+    } else {
+      floatingElem.style.transform = "translate(-10000px, -10000px)";
+    }
     return;
   }
 
@@ -34,6 +39,6 @@ export function setFloatingElemPositionForLinkEditor(
   top -= anchorElementRect.top;
   left -= anchorElementRect.left;
 
-  floatingElem.style.opacity = '1';
+  floatingElem.style.opacity = "1";
   floatingElem.style.transform = `translate(${left}px, ${top}px)`;
 }

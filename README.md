@@ -53,7 +53,7 @@ class Example extends Component {
   };
 
   render() {
-    return <Editor value={value}
+    return <Editor initialValue={value}
         onChange={onChange}
         onSave={onSave}
         configuration={uiConfiguration} />

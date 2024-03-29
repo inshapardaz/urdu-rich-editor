@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 import { Button, Dropdown, Select, Space } from "antd";
-import Icons from '../../icons';
+import Icons from "../../icons";
 
 // --------------------------------------------------
 
@@ -14,39 +14,44 @@ const FONT_FAMILY_OPTIONS = [
 ];
 
 export const defaultFont = (configuration) => {
-  var fonts = configuration?.toolbar?.fonts || FONT_FAMILY_OPTIONS;
-  return configuration?.toolbar?.defaultFont
-  ? fonts.find(x => x.value === configuration?.toolbar?.defaultFont) || fonts[0]
-  : fonts[0];
-}
-
+  var fonts = configuration?.toolbar?.fonts ?? FONT_FAMILY_OPTIONS;
+  var retVal = configuration?.toolbar?.defaultFont
+    ? fonts.find((x) => x.value === configuration?.toolbar?.defaultFont) ||
+      fonts[0]
+    : fonts[0];
+  return retVal;
+};
 
 // --------------------------------------------------
 const FontDropDown = ({ fonts, value, onChange = () => {} }) => {
-  const configuredFonts = (fonts && fonts.length > 0 ? fonts :  FONT_FAMILY_OPTIONS);
-  const selected = () => value && configuredFonts.find(x => x.value === value) || configuredFonts[0];
+  const configuredFonts =
+    fonts && fonts.length > 0 ? fonts : FONT_FAMILY_OPTIONS;
+  const selected = () =>
+    (value && configuredFonts.find((x) => x.value === value)) ||
+    configuredFonts[0];
   const onFontSelect = (item) => {
     onChange(item.key);
-  }
-  const items = configuredFonts
-  .map(i => ({
+  };
+  const items = configuredFonts.map((i) => ({
     key: i.value,
     label: i.label,
   }));
 
   return (
-    <Dropdown menu={{
-      items,
-      selectedKeys : [ selected() ],
-      onClick: onFontSelect,
-    }}
-      onClick={onFontSelect}>
+    <Dropdown
+      menu={{
+        items,
+        selectedKeys: [selected()],
+        onClick: onFontSelect,
+      }}
+      onClick={onFontSelect}
+    >
       <Button type="text" size="large">
         <Space>
-          { selected().label }
+          {selected().label}
           <Icons.Down />
         </Space>
-        </Button>
+      </Button>
     </Dropdown>
   );
 };

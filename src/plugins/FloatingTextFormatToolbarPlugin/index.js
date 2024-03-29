@@ -1,9 +1,9 @@
-import './index.css';
+import "./index.css";
 
-import {$isCodeHighlightNode} from '@lexical/code';
-import {$isLinkNode, TOGGLE_LINK_COMMAND} from '@lexical/link';
-import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
-import {mergeRegister} from '@lexical/utils';
+import { $isCodeHighlightNode } from "@lexical/code";
+import { $isLinkNode, TOGGLE_LINK_COMMAND } from "@lexical/link";
+import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import { mergeRegister } from "@lexical/utils";
 import {
   $getSelection,
   $isParagraphNode,
@@ -12,19 +12,18 @@ import {
   COMMAND_PRIORITY_LOW,
   FORMAT_TEXT_COMMAND,
   SELECTION_CHANGE_COMMAND,
-} from 'lexical';
-import {useCallback, useEffect, useRef, useState} from 'react';
-import * as React from 'react';
-import {createPortal} from 'react-dom';
+} from "lexical";
+import { useCallback, useEffect, useRef, useState } from "react";
+import * as React from "react";
+import { createPortal } from "react-dom";
 
-import {getDOMRangeRect} from '../../utils/getDOMRangeRect';
-import {getSelectedNode} from '../../utils/getSelectedNode';
-import {setFloatingElemPosition} from '../../utils/setFloatingElemPosition';
+import { getDOMRangeRect } from "../../utils/getDOMRangeRect";
+import { getSelectedNode } from "../../utils/getSelectedNode";
+import { setFloatingElemPosition } from "../../utils/setFloatingElemPosition";
 //----------------------------------------------
 
-import Icons from '../../icons';
-import { Button } from 'antd';
-import CheckButton from '../../components/checkButton';
+import Icons from "../../icons";
+import CheckButton from "../../components/checkButton";
 //----------------------------------------------
 function TextFormatFloatingToolbar({
   editor,
@@ -37,13 +36,14 @@ function TextFormatFloatingToolbar({
   isCode,
   isStrikethrough,
   isSubscript,
-  isSuperscript
+  isSuperscript,
+  isRtl,
 }) {
   const popupCharStylesEditorRef = useRef(null);
 
   const insertLink = useCallback(() => {
     if (!isLink) {
-      editor.dispatchCommand(TOGGLE_LINK_COMMAND, 'https://');
+      editor.dispatchCommand(TOGGLE_LINK_COMMAND, "https://");
     } else {
       editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
     }
@@ -54,34 +54,34 @@ function TextFormatFloatingToolbar({
       popupCharStylesEditorRef?.current &&
       (e.buttons === 1 || e.buttons === 3)
     ) {
-      if (popupCharStylesEditorRef.current.style.pointerEvents !== 'none') {
+      if (popupCharStylesEditorRef.current.style.pointerEvents !== "none") {
         const x = e.clientX;
         const y = e.clientY;
         const elementUnderMouse = document.elementFromPoint(x, y);
 
         if (!popupCharStylesEditorRef.current.contains(elementUnderMouse)) {
           // Mouse is not over the target element => not a normal click, but probably a drag
-          popupCharStylesEditorRef.current.style.pointerEvents = 'none';
+          popupCharStylesEditorRef.current.style.pointerEvents = "none";
         }
       }
     }
   }
   function mouseUpListener(e) {
     if (popupCharStylesEditorRef?.current) {
-      if (popupCharStylesEditorRef.current.style.pointerEvents !== 'auto') {
-        popupCharStylesEditorRef.current.style.pointerEvents = 'auto';
+      if (popupCharStylesEditorRef.current.style.pointerEvents !== "auto") {
+        popupCharStylesEditorRef.current.style.pointerEvents = "auto";
       }
     }
   }
 
   useEffect(() => {
     if (popupCharStylesEditorRef?.current) {
-      document.addEventListener('mousemove', mouseMoveListener);
-      document.addEventListener('mouseup', mouseUpListener);
+      document.addEventListener("mousemove", mouseMoveListener);
+      document.addEventListener("mouseup", mouseUpListener);
 
       return () => {
-        document.removeEventListener('mousemove', mouseMoveListener);
-        document.removeEventListener('mouseup', mouseUpListener);
+        document.removeEventListener("mousemove", mouseMoveListener);
+        document.removeEventListener("mouseup", mouseUpListener);
       };
     }
   }, [popupCharStylesEditorRef]);
@@ -111,6 +111,9 @@ function TextFormatFloatingToolbar({
         popupCharStylesEditorElem,
         anchorElem,
         isLink,
+        0,
+        0,
+        isRtl
       );
     }
   }, [editor, anchorElem, isLink]);
@@ -124,15 +127,15 @@ function TextFormatFloatingToolbar({
       });
     };
 
-    window.addEventListener('resize', update);
+    window.addEventListener("resize", update);
     if (scrollerElem) {
-      scrollerElem.addEventListener('scroll', update);
+      scrollerElem.addEventListener("scroll", update);
     }
 
     return () => {
-      window.removeEventListener('resize', update);
+      window.removeEventListener("resize", update);
       if (scrollerElem) {
-        scrollerElem.removeEventListener('scroll', update);
+        scrollerElem.removeEventListener("scroll", update);
       }
     };
   }, [editor, updateTextFormatFloatingToolbar, anchorElem]);
@@ -142,7 +145,7 @@ function TextFormatFloatingToolbar({
       updateTextFormatFloatingToolbar();
     });
     return mergeRegister(
-      editor.registerUpdateListener(({editorState}) => {
+      editor.registerUpdateListener(({ editorState }) => {
         editorState.read(() => {
           updateTextFormatFloatingToolbar();
         });
@@ -154,8 +157,8 @@ function TextFormatFloatingToolbar({
           updateTextFormatFloatingToolbar();
           return false;
         },
-        COMMAND_PRIORITY_LOW,
-      ),
+        COMMAND_PRIORITY_LOW
+      )
     );
   }, [editor, updateTextFormatFloatingToolbar]);
 
@@ -166,7 +169,7 @@ function TextFormatFloatingToolbar({
           <CheckButton
             type="text"
             onClick={() => {
-              editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'bold');
+              editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold");
             }}
             checked={isBold}
             aria-label="Format text as bold"
@@ -175,7 +178,7 @@ function TextFormatFloatingToolbar({
           <CheckButton
             type="text"
             onClick={() => {
-              editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'italic');
+              editor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic");
             }}
             checked={isItalic}
             aria-label="Format text as italics"
@@ -184,43 +187,45 @@ function TextFormatFloatingToolbar({
           <CheckButton
             type="text"
             onClick={() => {
-              editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'underline');
+              editor.dispatchCommand(FORMAT_TEXT_COMMAND, "underline");
             }}
             checked={isUnderline}
             aria-label="Format text to underlined"
             icon={<Icons.Underline />}
           />
-          { configuration.toolbar.showExtraFormat && <>
-          <CheckButton
-            type="text"
-            onClick={() => {
-              editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'strikethrough');
-            }}
-            checked={isStrikethrough}
-            aria-label="Format text with a strikethrough"
-            icon={<Icons.Strikethrough />}
-          />
-          <CheckButton
-            type="text"
-            onClick={() => {
-              editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'subscript');
-            }}
-            checked={isSubscript}
-            title="Subscript"
-            aria-label="Format Subscript"
-            icon={<Icons.SubScript />}
-          />
-          <CheckButton
-            type="text"
-            onClick={() => {
-              editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'superscript');
-            }}
-            checked={isSuperscript}
-            title="Superscript"
-            aria-label="Format Superscript"
-            icon={<Icons.SuperScript />}
-          />
-          </>}
+          {configuration.toolbar.showExtraFormat && (
+            <>
+              <CheckButton
+                type="text"
+                onClick={() => {
+                  editor.dispatchCommand(FORMAT_TEXT_COMMAND, "strikethrough");
+                }}
+                checked={isStrikethrough}
+                aria-label="Format text with a strikethrough"
+                icon={<Icons.Strikethrough />}
+              />
+              <CheckButton
+                type="text"
+                onClick={() => {
+                  editor.dispatchCommand(FORMAT_TEXT_COMMAND, "subscript");
+                }}
+                checked={isSubscript}
+                title="Subscript"
+                aria-label="Format Subscript"
+                icon={<Icons.SubScript />}
+              />
+              <CheckButton
+                type="text"
+                onClick={() => {
+                  editor.dispatchCommand(FORMAT_TEXT_COMMAND, "superscript");
+                }}
+                checked={isSuperscript}
+                title="Superscript"
+                aria-label="Format Superscript"
+                icon={<Icons.SuperScript />}
+              />
+            </>
+          )}
           {/* <CheckButton
             type="text"
             onClick={() => {
@@ -230,14 +235,17 @@ function TextFormatFloatingToolbar({
             aria-label="Insert code block"
             icon={<Icons.Code />}
           /> */}
-          { configuration.toolbar.showInsertLink && <>
-          <CheckButton
-            type="text"
-            onClick={insertLink}
-            checked={isLink}
-            aria-label="Insert link"
-            icon={<Icons.Link />} />
-          </> }
+          {configuration.toolbar.showInsertLink && (
+            <>
+              <CheckButton
+                type="text"
+                onClick={insertLink}
+                checked={isLink}
+                aria-label="Insert link"
+                icon={<Icons.Link />}
+              />
+            </>
+          )}
         </>
       )}
     </div>
@@ -282,13 +290,13 @@ function useFloatingTextFormatToolbar(editor, anchorElem, configuration) {
       const node = getSelectedNode(selection);
 
       // Update text format
-      setIsBold(selection.hasFormat('bold'));
-      setIsItalic(selection.hasFormat('italic'));
-      setIsUnderline(selection.hasFormat('underline'));
-      setIsStrikethrough(selection.hasFormat('strikethrough'));
-      setIsSubscript(selection.hasFormat('subscript'));
-      setIsSuperscript(selection.hasFormat('superscript'));
-      setIsCode(selection.hasFormat('code'));
+      setIsBold(selection.hasFormat("bold"));
+      setIsItalic(selection.hasFormat("italic"));
+      setIsUnderline(selection.hasFormat("underline"));
+      setIsStrikethrough(selection.hasFormat("strikethrough"));
+      setIsSubscript(selection.hasFormat("subscript"));
+      setIsSuperscript(selection.hasFormat("superscript"));
+      setIsCode(selection.hasFormat("code"));
 
       // Update links
       const parent = node.getParent();
@@ -300,15 +308,15 @@ function useFloatingTextFormatToolbar(editor, anchorElem, configuration) {
 
       if (
         !$isCodeHighlightNode(selection.anchor.getNode()) &&
-        selection.getTextContent() !== ''
+        selection.getTextContent() !== ""
       ) {
         setIsText($isTextNode(node) || $isParagraphNode(node));
       } else {
         setIsText(false);
       }
 
-      const rawTextContent = selection.getTextContent().replace(/\n/g, '');
-      if (!selection.isCollapsed() && rawTextContent === '') {
+      const rawTextContent = selection.getTextContent().replace(/\n/g, "");
+      if (!selection.isCollapsed() && rawTextContent === "") {
         setIsText(false);
         return;
       }
@@ -316,9 +324,9 @@ function useFloatingTextFormatToolbar(editor, anchorElem, configuration) {
   }, [editor]);
 
   useEffect(() => {
-    document.addEventListener('selectionchange', updatePopup);
+    document.addEventListener("selectionchange", updatePopup);
     return () => {
-      document.removeEventListener('selectionchange', updatePopup);
+      document.removeEventListener("selectionchange", updatePopup);
     };
   }, [updatePopup]);
 
@@ -331,7 +339,7 @@ function useFloatingTextFormatToolbar(editor, anchorElem, configuration) {
         if (editor.getRootElement() === null) {
           setIsText(false);
         }
-      }),
+      })
     );
   }, [editor, updatePopup]);
 
@@ -353,13 +361,13 @@ function useFloatingTextFormatToolbar(editor, anchorElem, configuration) {
       isUnderline={isUnderline}
       isCode={isCode}
     />,
-    anchorElem,
+    anchorElem
   );
 }
 
 export default function FloatingTextFormatToolbarPlugin({
   anchorElem = document.body,
-  configuration
+  configuration,
 }) {
   const [editor] = useLexicalComposerContext();
   return useFloatingTextFormatToolbar(editor, anchorElem, configuration);
