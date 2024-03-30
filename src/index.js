@@ -95,7 +95,7 @@ export default ({
     namespace: "MyEditor",
     editorState: () =>
       configuration.format === "markdown"
-        ? $convertFromMarkdownString(editorState, TRANSFORMERS)
+        ? $convertFromMarkdownString(editorState ?? "", TRANSFORMERS)
         : editorState,
     nodes: [...EditorNodes],
     theme: EditorTheme,
