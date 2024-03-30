@@ -63,7 +63,7 @@ const Demo = () => {
       autoCorrections: (lang) => autoCorrection[lang],
       wordList: (lang) => wordList[lang],
     },
-    format: "raw",
+    format: "markdown",
   });
   const lang = configuration?.language ?? "en";
   const locale = i18n[lang];

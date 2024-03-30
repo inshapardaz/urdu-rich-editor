@@ -93,10 +93,11 @@ export default ({
       : value === EMPTY_CONTENT;
   const initialConfig = {
     namespace: "MyEditor",
-    editorState: () =>
-      configuration.format === "markdown"
+    editorState: () => {
+      return configuration.format === "markdown" && editorState
         ? $convertFromMarkdownString(editorState ?? "", TRANSFORMERS)
-        : editorState,
+        : editorState;
+    },
     nodes: [...EditorNodes],
     theme: EditorTheme,
     onError,

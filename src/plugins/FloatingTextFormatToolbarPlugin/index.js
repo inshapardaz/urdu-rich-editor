@@ -168,6 +168,7 @@ function TextFormatFloatingToolbar({
         <>
           <CheckButton
             type="text"
+            size="small"
             onClick={() => {
               editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold");
             }}
@@ -177,6 +178,7 @@ function TextFormatFloatingToolbar({
           />
           <CheckButton
             type="text"
+            size="small"
             onClick={() => {
               editor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic");
             }}
@@ -186,6 +188,7 @@ function TextFormatFloatingToolbar({
           />
           <CheckButton
             type="text"
+            size="small"
             onClick={() => {
               editor.dispatchCommand(FORMAT_TEXT_COMMAND, "underline");
             }}
@@ -196,6 +199,7 @@ function TextFormatFloatingToolbar({
           {configuration.toolbar.showExtraFormat && (
             <>
               <CheckButton
+                size="small"
                 type="text"
                 onClick={() => {
                   editor.dispatchCommand(FORMAT_TEXT_COMMAND, "strikethrough");
@@ -206,6 +210,7 @@ function TextFormatFloatingToolbar({
               />
               <CheckButton
                 type="text"
+                size="small"
                 onClick={() => {
                   editor.dispatchCommand(FORMAT_TEXT_COMMAND, "subscript");
                 }}
@@ -216,6 +221,7 @@ function TextFormatFloatingToolbar({
               />
               <CheckButton
                 type="text"
+                size="small"
                 onClick={() => {
                   editor.dispatchCommand(FORMAT_TEXT_COMMAND, "superscript");
                 }}
@@ -239,6 +245,7 @@ function TextFormatFloatingToolbar({
             <>
               <CheckButton
                 type="text"
+                size="small"
                 onClick={insertLink}
                 checked={isLink}
                 aria-label="Insert link"
