@@ -103,164 +103,164 @@ const Demo = () => {
   };
 
   return (
-    <React.StrictMode>
-      <ConfigProvider
-        direction={lang ? "rtl" : "ltr"}
-        locale={lang}
-        componentSize="large"
-      >
-        <div className="editorShell" style={{ direction: locale.direction }}>
+    <div style={{ position: "relative", minHeight: "100vh" }}>
+      <React.StrictMode>
+        <ConfigProvider
+          direction={lang ? "rtl" : "ltr"}
+          locale={lang}
+          componentSize="large"
+        >
           <Editor
             configuration={configuration}
             value={value}
             onChange={(val) => console.log("OnChange: ", val)}
             onSave={onSave}
           />
-        </div>
-        <FloatButton icon={<Icons.Setting />} onClick={showDrawer} />
-        <Drawer
-          title="Settings"
-          icon={<Icons.Setting />}
-          placement="right"
-          onClose={onClose}
-          open={open}
-        >
-          <Space direction="vertical">
-            <Switch
-              checkedChildren="Rich Text"
-              unCheckedChildren="Plain Text"
-              defaultChecked={configuration.richText}
-              onChange={(checked) =>
-                setConfiguration((e) => ({ ...e, richText: checked }))
-              }
-            />
-            <Select
-              defaultValue={lang}
-              onChange={(value) => setConfiguration(changeLanguage)}
-              options={[
-                {
-                  value: "en",
-                  label: "English",
-                },
-                {
-                  value: "ur",
-                  label: "Urdu",
-                },
-              ]}
-            />
-            <Divider />
-            <Select
-              defaultValue={configuration.format}
-              onChange={(value) =>
-                setConfiguration((e) => ({ ...e, format: value }))
-              }
-              options={[
-                {
-                  value: "raw",
-                  label: "Raw",
-                },
-                {
-                  value: "markdown",
-                  label: "Markdown",
-                },
-              ]}
-            />
-            <Divider />
-            <Switch
-              checkedChildren="Show Alignment"
-              unCheckedChildren="Hide Alignment"
-              defaultChecked={configuration.toolbar.showAlignment}
-              onChange={(checked) =>
-                setConfiguration((e) => ({
-                  ...e,
-                  toolbar: { ...e.toolbar, showAlignment: checked },
-                }))
-              }
-            />
-            <Switch
-              checkedChildren="Show Undo/Redo"
-              unCheckedChildren="Hide Undo/Redo"
-              defaultChecked={configuration.toolbar.showUndoRedo}
-              onChange={(checked) =>
-                setConfiguration((e) => ({
-                  ...e,
-                  toolbar: { ...e.toolbar, showUndoRedo: checked },
-                }))
-              }
-            />
-            <Switch
-              checkedChildren="Show Block Format"
-              unCheckedChildren="Hide Block Format"
-              defaultChecked={configuration.toolbar.showBlockFormat}
-              onChange={(checked) =>
-                setConfiguration((e) => ({
-                  ...e,
-                  toolbar: { ...e.toolbar, showBlockFormat: checked },
-                }))
-              }
-            />
-            <Switch
-              checkedChildren="Show Insert"
-              unCheckedChildren="Hide Insert"
-              defaultChecked={configuration.toolbar.showInsert}
-              onChange={(checked) =>
-                setConfiguration((e) => ({
-                  ...e,
-                  toolbar: { ...e.toolbar, showInsert: checked },
-                }))
-              }
-            />
-            <Switch
-              checkedChildren="Show Font Format"
-              unCheckedChildren="Hide Font Format"
-              defaultChecked={configuration.toolbar.showFontFormat}
-              onChange={(checked) =>
-                setConfiguration((e) => ({
-                  ...e,
-                  toolbar: { ...e.toolbar, showFontFormat: checked },
-                }))
-              }
-            />
-            <Switch
-              checkedChildren="Show extra formatting options"
-              unCheckedChildren="Hide extra formatting options"
-              defaultChecked={configuration.toolbar.showExtraFormat}
-              onChange={(checked) =>
-                setConfiguration((e) => ({
-                  ...e,
-                  toolbar: { ...e.toolbar, showExtraFormat: checked },
-                }))
-              }
-            />
-            <Switch
-              checkedChildren="Show link options"
-              unCheckedChildren="Hide link options"
-              defaultChecked={configuration.toolbar.showInsertLink}
-              onChange={(checked) =>
-                setConfiguration((e) => ({
-                  ...e,
-                  toolbar: { ...e.toolbar, showInsertLink: checked },
-                }))
-              }
-            />
-            <Divider />
-            <Switch
-              checkedChildren="Spell Check"
-              unCheckedChildren="No Spell Check"
-              defaultChecked={configuration.spellchecker.enabled}
-              onChange={(checked) =>
-                setConfiguration((e) => ({
-                  ...e,
-                  spellchecker: { ...e.spellchecker, enabled: checked },
-                }))
-              }
-            />
-            <Divider />
-            <Button onClick={setEditorValue}>Change Value</Button>
-          </Space>
-        </Drawer>
-      </ConfigProvider>
-    </React.StrictMode>
+          <FloatButton icon={<Icons.Setting />} onClick={showDrawer} />
+          <Drawer
+            title="Settings"
+            icon={<Icons.Setting />}
+            placement="right"
+            onClose={onClose}
+            open={open}
+          >
+            <Space direction="vertical">
+              <Switch
+                checkedChildren="Rich Text"
+                unCheckedChildren="Plain Text"
+                defaultChecked={configuration.richText}
+                onChange={(checked) =>
+                  setConfiguration((e) => ({ ...e, richText: checked }))
+                }
+              />
+              <Select
+                defaultValue={lang}
+                onChange={(value) => setConfiguration(changeLanguage)}
+                options={[
+                  {
+                    value: "en",
+                    label: "English",
+                  },
+                  {
+                    value: "ur",
+                    label: "Urdu",
+                  },
+                ]}
+              />
+              <Divider />
+              <Select
+                defaultValue={configuration.format}
+                onChange={(value) =>
+                  setConfiguration((e) => ({ ...e, format: value }))
+                }
+                options={[
+                  {
+                    value: "raw",
+                    label: "Raw",
+                  },
+                  {
+                    value: "markdown",
+                    label: "Markdown",
+                  },
+                ]}
+              />
+              <Divider />
+              <Switch
+                checkedChildren="Show Alignment"
+                unCheckedChildren="Hide Alignment"
+                defaultChecked={configuration.toolbar.showAlignment}
+                onChange={(checked) =>
+                  setConfiguration((e) => ({
+                    ...e,
+                    toolbar: { ...e.toolbar, showAlignment: checked },
+                  }))
+                }
+              />
+              <Switch
+                checkedChildren="Show Undo/Redo"
+                unCheckedChildren="Hide Undo/Redo"
+                defaultChecked={configuration.toolbar.showUndoRedo}
+                onChange={(checked) =>
+                  setConfiguration((e) => ({
+                    ...e,
+                    toolbar: { ...e.toolbar, showUndoRedo: checked },
+                  }))
+                }
+              />
+              <Switch
+                checkedChildren="Show Block Format"
+                unCheckedChildren="Hide Block Format"
+                defaultChecked={configuration.toolbar.showBlockFormat}
+                onChange={(checked) =>
+                  setConfiguration((e) => ({
+                    ...e,
+                    toolbar: { ...e.toolbar, showBlockFormat: checked },
+                  }))
+                }
+              />
+              <Switch
+                checkedChildren="Show Insert"
+                unCheckedChildren="Hide Insert"
+                defaultChecked={configuration.toolbar.showInsert}
+                onChange={(checked) =>
+                  setConfiguration((e) => ({
+                    ...e,
+                    toolbar: { ...e.toolbar, showInsert: checked },
+                  }))
+                }
+              />
+              <Switch
+                checkedChildren="Show Font Format"
+                unCheckedChildren="Hide Font Format"
+                defaultChecked={configuration.toolbar.showFontFormat}
+                onChange={(checked) =>
+                  setConfiguration((e) => ({
+                    ...e,
+                    toolbar: { ...e.toolbar, showFontFormat: checked },
+                  }))
+                }
+              />
+              <Switch
+                checkedChildren="Show extra formatting options"
+                unCheckedChildren="Hide extra formatting options"
+                defaultChecked={configuration.toolbar.showExtraFormat}
+                onChange={(checked) =>
+                  setConfiguration((e) => ({
+                    ...e,
+                    toolbar: { ...e.toolbar, showExtraFormat: checked },
+                  }))
+                }
+              />
+              <Switch
+                checkedChildren="Show link options"
+                unCheckedChildren="Hide link options"
+                defaultChecked={configuration.toolbar.showInsertLink}
+                onChange={(checked) =>
+                  setConfiguration((e) => ({
+                    ...e,
+                    toolbar: { ...e.toolbar, showInsertLink: checked },
+                  }))
+                }
+              />
+              <Divider />
+              <Switch
+                checkedChildren="Spell Check"
+                unCheckedChildren="No Spell Check"
+                defaultChecked={configuration.spellchecker.enabled}
+                onChange={(checked) =>
+                  setConfiguration((e) => ({
+                    ...e,
+                    spellchecker: { ...e.spellchecker, enabled: checked },
+                  }))
+                }
+              />
+              <Divider />
+              <Button onClick={setEditorValue}>Change Value</Button>
+            </Space>
+          </Drawer>
+        </ConfigProvider>
+      </React.StrictMode>
+    </div>
   );
 };
 

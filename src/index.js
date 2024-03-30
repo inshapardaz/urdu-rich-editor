@@ -128,25 +128,61 @@ export default ({
   }, [isSmallWidthViewport]);
 
   return (
-    <LexicalComposer initialConfig={initialConfig}>
-      {configuration.richText && (
-        <ToolbarPlugin
-          configuration={configuration}
-          setIsLinkEditMode={setIsLinkEditMode}
-          locale={locale}
-        />
-      )}
-      <div className={"editor-container " + (isRtl ? "rtl" : null)}>
-        {configuration.richText ? (
-          <>
-            <RichTextPlugin
-              contentEditable={
-                <div className="editorScroller">
-                  <div className="editor" ref={onRef}>
-                    <ContentEditable />
+    <div className="editorShell" style={{ direction: locale.direction }}>
+      <LexicalComposer initialConfig={initialConfig}>
+        {configuration.richText && (
+          <ToolbarPlugin
+            configuration={configuration}
+            setIsLinkEditMode={setIsLinkEditMode}
+            locale={locale}
+          />
+        )}
+        <div className={"editor-container " + (isRtl ? "rtl" : null)}>
+          {configuration.richText ? (
+            <>
+              <RichTextPlugin
+                contentEditable={
+                  <div className="editorScroller">
+                    <div className="editor" ref={onRef}>
+                      <ContentEditable />
+                    </div>
                   </div>
-                </div>
-              }
+                }
+                placeholder={
+                  <Placeholder>
+                    {configuration.placeholder ?? locale.resources.placeholder}
+                  </Placeholder>
+                }
+                ErrorBoundary={LexicalErrorBoundary}
+              />
+              <ListPlugin />
+              <CheckListPlugin />
+              <AutoLinkPlugin />
+              <LinkPlugin />
+              <HorizontalRulePlugin />
+              {floatingAnchorElem && !isSmallWidthViewport && (
+                <>
+                  <DraggableBlockPlugin
+                    anchorElem={floatingAnchorElem}
+                    isRtl={isRtl}
+                  />
+                  <FloatingLinkEditorPlugin
+                    anchorElem={floatingAnchorElem}
+                    isLinkEditMode={isLinkEditMode}
+                    setIsLinkEditMode={setIsLinkEditMode}
+                    isRtl={isRtl}
+                  />
+                  <FloatingTextFormatToolbarPlugin
+                    configuration={configuration}
+                    anchorElem={floatingAnchorElem}
+                    isRtl={isRtl}
+                  />
+                </>
+              )}
+            </>
+          ) : (
+            <PlainTextPlugin
+              contentEditable={<ContentEditable />}
               placeholder={
                 <Placeholder>
                   {configuration.placeholder ?? locale.resources.placeholder}
@@ -154,61 +190,27 @@ export default ({
               }
               ErrorBoundary={LexicalErrorBoundary}
             />
-            <ListPlugin />
-            <CheckListPlugin />
-            <AutoLinkPlugin />
-            <LinkPlugin />
-            <HorizontalRulePlugin />
-            {floatingAnchorElem && !isSmallWidthViewport && (
-              <>
-                <DraggableBlockPlugin
-                  anchorElem={floatingAnchorElem}
-                  isRtl={isRtl}
-                />
-                <FloatingLinkEditorPlugin
-                  anchorElem={floatingAnchorElem}
-                  isLinkEditMode={isLinkEditMode}
-                  setIsLinkEditMode={setIsLinkEditMode}
-                  isRtl={isRtl}
-                />
-                <FloatingTextFormatToolbarPlugin
-                  configuration={configuration}
-                  anchorElem={floatingAnchorElem}
-                  isRtl={isRtl}
-                />
-              </>
-            )}
-          </>
-        ) : (
-          <PlainTextPlugin
-            contentEditable={<ContentEditable />}
-            placeholder={
-              <Placeholder>
-                {configuration.placeholder ?? locale.resources.placeholder}
-              </Placeholder>
+          )}
+          <HistoryPlugin />
+          <SavePlugin onSave={onSave} format={configuration.format} />
+          <SpellCheckerPlugin
+            locale={locale}
+            language={
+              configuration.spellchecker.language || configuration.language
             }
-            ErrorBoundary={LexicalErrorBoundary}
+            configuration={configuration.spellchecker}
           />
-        )}
-        <HistoryPlugin />
-        <SavePlugin onSave={onSave} format={configuration.format} />
-        <SpellCheckerPlugin
-          locale={locale}
-          language={
-            configuration.spellchecker.language || configuration.language
-          }
-          configuration={configuration.spellchecker}
-        />
-        <ControlledValuePlugin
-          value={value}
-          onChange={onChange}
-          format={configuration.format}
-          isRichtext={configuration.richText}
-        />
-        {configuration.format == "markdown" && (
-          <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
-        )}
-      </div>
-    </LexicalComposer>
+          <ControlledValuePlugin
+            value={value}
+            onChange={onChange}
+            format={configuration.format}
+            isRichtext={configuration.richText}
+          />
+          {configuration.format == "markdown" && (
+            <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
+          )}
+        </div>
+      </LexicalComposer>
+    </div>
   );
 };
